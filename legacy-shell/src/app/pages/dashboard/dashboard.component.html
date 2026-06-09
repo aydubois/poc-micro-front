@@ -29,12 +29,12 @@
     ></app-stat-card>
   </section>
 
-  <!-- ** POC ** emplacement pour le widget MFE Stats, sera branché en tâche 8 -->
+  <!-- ** POC ** widget MFE Stats chargé dynamiquement via la façade -->
   <section class="dashboard__mfe" aria-label="Statistiques avancées (MFE)">
-    <h2 class="dashboard__mfe-title">Statistiques avancées (MFE)</h2>
-    <div class="dashboard__mfe-slot">
-      <!-- <app-mfe-outlet remote="mfeStats" module="./Widget"></app-mfe-outlet> -->
-      <p class="dashboard__mfe-placeholder">[ MFE branché ici à l'étape 8 ]</p>
-    </div>
+    <app-mfe-outlet
+      remote="mfeStats"
+      module="./Widget"
+      componentName="StatsWidgetComponent"
+    ></app-mfe-outlet>
   </section>
 </div>

@@ -1,12 +1,13 @@
 <div class="poc-page users">
   <h1 class="poc-section-title">Utilisateurs</h1>
 
-  <!-- ** POC ** emplacement pour le widget MFE Notifications, sera branché en tâche 8 -->
+  <!-- ** POC ** widget MFE Notifications chargé dynamiquement via la façade -->
   <section class="users__mfe" aria-label="Notifications (MFE)">
-    <h2 class="users__mfe-title">Notifications utilisateurs (MFE)</h2>
-    <div class="users__mfe-slot">
-      <p class="users__mfe-placeholder">[ MFE branché ici à l'étape 8 ]</p>
-    </div>
+    <app-mfe-outlet
+      remote="mfeNotifications"
+      module="./Widget"
+      componentName="NotificationsWidgetComponent"
+    ></app-mfe-outlet>
   </section>
 
   <section aria-labelledby="recent-users-title" class="users__recent">

@@ -11,31 +11,6 @@
 
 .dashboard__mfe {
   margin-top: var(--poc-space-6);
-  background: var(--poc-color-surface);
-  border-radius: var(--poc-radius-md);
-  padding: var(--poc-space-4);
-  box-shadow: var(--poc-shadow-sm);
-  border: 1px dashed var(--poc-color-border);
-}
-
-.dashboard__mfe-title {
-  margin: 0 0 var(--poc-space-3);
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--poc-color-text);
-}
-
-.dashboard__mfe-slot {
-  min-height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.dashboard__mfe-placeholder {
-  margin: 0;
-  color: var(--poc-color-text-muted);
-  font-style: italic;
 }
 
 @media (min-width: 600px) {
