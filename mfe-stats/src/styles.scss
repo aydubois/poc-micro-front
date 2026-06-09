@@ -1,0 +1,16 @@
+/* ** POC ** styles globaux mfe-stats
+   Minimaux car ce projet est principalement un remote MF.
+   Quand on lance `ng serve mfe-stats` en standalone (port 4201), on a une
+   page de démo qui affiche le widget. */
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: #f5f6fa;
+}
+
+* {
+  box-sizing: border-box;
+}
