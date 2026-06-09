@@ -45,14 +45,14 @@ export class MfeFacadeService {
     const cacheKey = `${remoteKey}::${exposedModule}`
     let loaded = this.cache.get(cacheKey)
     if (!loaded) {
-      // ** POC ** type 'script' = remoteEntry.js classique (Module Federation v1).
-      // type 'module' serait pour les modules ES modernes (Native Federation).
+      // ** POC ** type 'module' : Angular CLI 16 build le remoteEntry en ES
+      // module (output.module=true), pas en script var classique. Le type
+      // 'script' ne fonctionnerait que si on forçait la sortie en mode var.
       loaded = loadRemoteModule({
-        type: 'script',
+        type: 'module',
         remoteEntry: remote.remoteEntry,
-        remoteName: remote.remoteName,
         exposedModule
-      })
+      }) as Promise<LoadedExposedModule>
       this.cache.set(cacheKey, loaded)
     }
 
