@@ -1,0 +1,16 @@
+{
+  "name": "poc-micro-front",
+  "version": "0.1.0",
+  "private": true,
+  "description": "POC d'architecture micro-frontends : legacy Angular 16 + shell moderne Angular 21 + MFE Module Federation puis Native Federation",
+  "scripts": {
+    "install:phase1": "cd legacy-shell && npm install && cd ../mfe-stats && npm install && cd ../mfe-notifications && npm install",
+    "dev:phase1": "concurrently -n shell,stats,notif -c blue,yellow,magenta \"npm --prefix legacy-shell run start\" \"npm --prefix mfe-stats run start\" \"npm --prefix mfe-notifications run start\"",
+    "dev:legacy": "npm --prefix legacy-shell run start",
+    "dev:stats": "npm --prefix mfe-stats run start",
+    "dev:notif": "npm --prefix mfe-notifications run start"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
