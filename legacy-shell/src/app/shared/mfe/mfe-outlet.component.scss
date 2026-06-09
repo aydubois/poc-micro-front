@@ -1,0 +1,24 @@
+:host {
+  display: block;
+}
+
+.mfe-outlet {
+  min-height: 60px;
+}
+
+.mfe-outlet__status {
+  font-style: italic;
+  color: var(--poc-color-text-muted);
+  padding: var(--poc-space-3);
+  text-align: center;
+}
+
+.mfe-outlet__error {
+  background: rgba(198, 40, 40, 0.08);
+  color: var(--poc-color-danger);
+  border-left: 3px solid var(--poc-color-danger);
+  padding: var(--poc-space-3) var(--poc-space-4);
+  border-radius: var(--poc-radius-sm);
+  font-size: 0.9rem;
+  word-break: break-word;
+}
