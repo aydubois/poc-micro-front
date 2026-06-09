@@ -1,0 +1,25 @@
+<section class="notif-widget" aria-labelledby="notif-widget-title">
+  <header class="notif-widget__header">
+    <h3 id="notif-widget-title" class="notif-widget__title">🔔 Notifications (MFE)</h3>
+    <span class="notif-widget__badge">mfe-notifications · A16</span>
+  </header>
+
+  <ul class="notif-widget__list">
+    <li
+      *ngFor="let item of notifications; trackBy: trackById"
+      class="notif-widget__item"
+      [class.is-info]="item.level === 'info'"
+      [class.is-warning]="item.level === 'warning'"
+      [class.is-success]="item.level === 'success'"
+    >
+      <div class="notif-widget__bullet" aria-hidden="true"></div>
+      <div class="notif-widget__body">
+        <div class="notif-widget__row">
+          <strong class="notif-widget__name">{{ item.title }}</strong>
+          <span class="notif-widget__time">{{ item.time }}</span>
+        </div>
+        <p class="notif-widget__text">{{ item.body }}</p>
+      </div>
+    </li>
+  </ul>
+</section>

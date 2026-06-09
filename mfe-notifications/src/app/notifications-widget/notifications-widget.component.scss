@@ -1,0 +1,107 @@
+/* ** POC ** fond violet caractéristique du MFE notifications — permet de
+   le repérer instantanément dans le host */
+
+:host {
+  display: block;
+}
+
+.notif-widget {
+  background: linear-gradient(135deg, #9b59ff 0%, #6f42c1 100%);
+  color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(111, 66, 193, 0.25);
+}
+
+.notif-widget__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.notif-widget__title {
+  margin: 0;
+  font-size: clamp(1rem, 0.9rem + 0.4vw, 1.2rem);
+  font-weight: 600;
+}
+
+.notif-widget__badge {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+
+.notif-widget__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.notif-widget__item {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  border-left: 3px solid transparent;
+
+  &.is-info {
+    border-left-color: #66d9ff;
+  }
+
+  &.is-warning {
+    border-left-color: #ffd166;
+  }
+
+  &.is-success {
+    border-left-color: #6dffb8;
+  }
+}
+
+.notif-widget__bullet {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.notif-widget__body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.notif-widget__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 2px;
+}
+
+.notif-widget__name {
+  font-size: 0.95rem;
+}
+
+.notif-widget__time {
+  font-size: 0.75rem;
+  opacity: 0.8;
+  white-space: nowrap;
+}
+
+.notif-widget__text {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.92;
+  line-height: 1.4;
+}
