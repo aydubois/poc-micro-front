@@ -1,0 +1,29 @@
+:host {
+  display: block;
+}
+
+.welcome-banner {
+  background: linear-gradient(135deg, #3f51b5 0%, #5c6bc0 100%);
+  color: #fff;
+  padding: var(--poc-space-5);
+  border-radius: var(--poc-radius-lg);
+  box-shadow: var(--poc-shadow-md);
+}
+
+.welcome-banner__title {
+  margin: 0 0 var(--poc-space-2);
+  font-size: clamp(1.5rem, 1.3rem + 0.6vw, 2rem);
+  font-weight: 600;
+}
+
+.welcome-banner__subtitle {
+  margin: 0;
+  opacity: 0.92;
+  font-size: 0.95rem;
+}
+
+@media (min-width: 900px) {
+  .welcome-banner {
+    padding: var(--poc-space-6);
+  }
+}

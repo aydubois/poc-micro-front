@@ -1,0 +1,19 @@
+<mat-card class="order-card">
+  <mat-card-header>
+    <mat-card-title class="order-card__title">{{ order.reference }}</mat-card-title>
+    <mat-card-subtitle>{{ order.customerName }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content class="order-card__content">
+    <div class="order-card__amount">
+      {{ order.totalAmount | currency:'EUR':'symbol':'1.2-2':'fr' }}
+    </div>
+    <div class="order-card__meta">
+      <mat-chip-set aria-label="Statut de la commande">
+        <mat-chip class="order-card__chip" [ngClass]="statusClass">
+          {{ statusLabel }}
+        </mat-chip>
+      </mat-chip-set>
+      <span class="order-card__date">{{ order.createdAt }}</span>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,63 @@
+:host {
+  display: block;
+}
+
+.user-row {
+  display: flex;
+  align-items: center;
+  gap: var(--poc-space-3);
+  padding: var(--poc-space-3) var(--poc-space-4);
+  background: var(--poc-color-surface);
+  border-radius: var(--poc-radius-md);
+  box-shadow: var(--poc-shadow-sm);
+  transition: background 120ms ease-in;
+
+  &.is-inactive {
+    opacity: 0.6;
+    background: #fafafa;
+  }
+}
+
+.user-row__avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--poc-color-primary);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.user-row__info {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.user-row__name {
+  font-weight: 600;
+}
+
+.user-row__email {
+  font-size: 0.85rem;
+  color: var(--poc-color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-row__role {
+  font-size: 0.75rem;
+  color: var(--poc-color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.user-row__action {
+  flex-shrink: 0;
+}

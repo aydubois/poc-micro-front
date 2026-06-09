@@ -1,0 +1,16 @@
+<div class="poc-page products">
+  <h1 class="poc-section-title">Produits</h1>
+
+  <p class="products__intro">
+    Catalogue mocké — sert à démontrer une route lazy chargeant un composant standalone.
+  </p>
+
+  <p *ngIf="isLoading" class="products__loading" role="status">Chargement du catalogue…</p>
+
+  <div *ngIf="!isLoading" class="products__grid">
+    <app-product-card
+      *ngFor="let product of products; trackBy: trackById"
+      [product]="product"
+    ></app-product-card>
+  </div>
+</div>

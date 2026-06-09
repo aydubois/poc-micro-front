@@ -1,0 +1,68 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.order-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.order-card__title {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.order-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--poc-space-3);
+  flex: 1 1 auto;
+}
+
+.order-card__amount {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--poc-color-primary);
+}
+
+.order-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--poc-space-3);
+  flex-wrap: wrap;
+}
+
+.order-card__date {
+  font-size: 0.85rem;
+  color: var(--poc-color-text-muted);
+}
+
+.order-card__chip {
+  &.is-pending {
+    background: rgba(239, 108, 0, 0.12);
+    color: var(--poc-color-warn);
+  }
+
+  &.is-paid {
+    background: rgba(63, 81, 181, 0.12);
+    color: var(--poc-color-primary);
+  }
+
+  &.is-shipped {
+    background: rgba(2, 119, 189, 0.12);
+    color: #0277bd;
+  }
+
+  &.is-delivered {
+    background: rgba(46, 125, 50, 0.12);
+    color: var(--poc-color-success);
+  }
+
+  &.is-cancelled {
+    background: rgba(198, 40, 40, 0.12);
+    color: var(--poc-color-danger);
+  }
+}

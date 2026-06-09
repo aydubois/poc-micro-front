@@ -1,0 +1,19 @@
+<article class="user-row" [class.is-inactive]="!user.isActive">
+  <div class="user-row__avatar" aria-hidden="true">
+    {{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}
+  </div>
+  <div class="user-row__info">
+    <div class="user-row__name">{{ user.firstName }} {{ user.lastName }}</div>
+    <div class="user-row__email">{{ user.email }}</div>
+    <div class="user-row__role">{{ user.role }}</div>
+  </div>
+  <button
+    mat-button
+    type="button"
+    class="user-row__action"
+    [attr.aria-label]="user.isActive ? 'Désactiver ' + user.firstName : 'Activer ' + user.firstName"
+    (click)="onToggle()"
+  >
+    {{ user.isActive ? 'Désactiver' : 'Activer' }}
+  </button>
+</article>

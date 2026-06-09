@@ -1,0 +1,66 @@
+<div class="poc-page users">
+  <h1 class="poc-section-title">Utilisateurs</h1>
+
+  <!-- ** POC ** emplacement pour le widget MFE Notifications, sera branché en tâche 8 -->
+  <section class="users__mfe" aria-label="Notifications (MFE)">
+    <h2 class="users__mfe-title">Notifications utilisateurs (MFE)</h2>
+    <div class="users__mfe-slot">
+      <p class="users__mfe-placeholder">[ MFE branché ici à l'étape 8 ]</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="recent-users-title" class="users__recent">
+    <h2 id="recent-users-title" class="users__recent-title">Récemment ajoutés</h2>
+    <div class="users__recent-grid">
+      <app-user-row
+        *ngFor="let user of recentUsers; trackBy: trackById"
+        [user]="user"
+        (userToggled)="onUserToggled($event)"
+      ></app-user-row>
+    </div>
+  </section>
+
+  <section aria-labelledby="users-table-title" class="users__table-wrap">
+    <h2 id="users-table-title" class="users__table-title">Tous les utilisateurs</h2>
+
+    <p *ngIf="isLoading" class="users__loading" role="status">Chargement…</p>
+
+    <div class="users__table-scroll" *ngIf="!isLoading">
+      <table mat-table [dataSource]="users" class="users__table">
+        <ng-container matColumnDef="identity">
+          <th mat-header-cell *matHeaderCellDef scope="col">Nom</th>
+          <td mat-cell *matCellDef="let user">
+            {{ user.firstName }} {{ user.lastName }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef scope="col">Email</th>
+          <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef scope="col">Rôle</th>
+          <td mat-cell *matCellDef="let user">{{ user.role }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef scope="col">Statut</th>
+          <td mat-cell *matCellDef="let user">
+            <span class="users__status" [class.is-active]="user.isActive">
+              {{ user.isActive ? 'Actif' : 'Inactif' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef scope="col">Créé le</th>
+          <td mat-cell *matCellDef="let user">{{ user.createdAt }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </section>
+</div>

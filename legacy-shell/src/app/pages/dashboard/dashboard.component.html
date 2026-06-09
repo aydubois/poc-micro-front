@@ -1,0 +1,40 @@
+<div class="poc-page dashboard">
+  <h1 class="poc-section-title">Tableau de bord</h1>
+
+  <app-welcome-banner></app-welcome-banner>
+
+  <section class="dashboard__stats" aria-label="Indicateurs clés">
+    <app-stat-card
+      label="Utilisateurs actifs"
+      [value]="(activeUsers$ | async) ?? '—'"
+      icon="group"
+      accent="primary"
+      trend="up"
+    ></app-stat-card>
+
+    <app-stat-card
+      label="Produits disponibles"
+      [value]="(availableProducts$ | async) ?? '—'"
+      icon="inventory_2"
+      accent="success"
+      trend="flat"
+    ></app-stat-card>
+
+    <app-stat-card
+      label="Revenu cumulé (€)"
+      [value]="(totalRevenue$ | async | number:'1.2-2') ?? '—'"
+      icon="payments"
+      accent="warn"
+      trend="up"
+    ></app-stat-card>
+  </section>
+
+  <!-- ** POC ** emplacement pour le widget MFE Stats, sera branché en tâche 8 -->
+  <section class="dashboard__mfe" aria-label="Statistiques avancées (MFE)">
+    <h2 class="dashboard__mfe-title">Statistiques avancées (MFE)</h2>
+    <div class="dashboard__mfe-slot">
+      <!-- <app-mfe-outlet remote="mfeStats" module="./Widget"></app-mfe-outlet> -->
+      <p class="dashboard__mfe-placeholder">[ MFE branché ici à l'étape 8 ]</p>
+    </div>
+  </section>
+</div>

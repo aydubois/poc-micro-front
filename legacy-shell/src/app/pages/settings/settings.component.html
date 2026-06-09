@@ -1,0 +1,53 @@
+<div class="poc-page settings">
+  <h1 class="poc-section-title">Paramètres</h1>
+
+  <p class="settings__intro">
+    Formulaire reactive simple — démontre une route lazy chargeant un composant
+    standalone avec Material moderne (MatFormField, MatSelect, MatSlideToggle).
+  </p>
+
+  <form class="settings__form" [formGroup]="form" (ngSubmit)="onSave()" novalidate>
+    <mat-form-field appearance="outline" class="settings__field">
+      <mat-label>Nom de l'application</mat-label>
+      <input matInput formControlName="appName" autocomplete="off" />
+      <mat-error *ngIf="form.controls.appName.hasError('required') && form.controls.appName.touched">
+        Le nom est obligatoire.
+      </mat-error>
+      <mat-error *ngIf="form.controls.appName.hasError('minlength') && form.controls.appName.touched">
+        Au moins 3 caractères.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="settings__field">
+      <mat-label>Langue par défaut</mat-label>
+      <mat-select formControlName="language">
+        <mat-option *ngFor="let lang of languages" [value]="lang.value">
+          {{ lang.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="settings__field">
+      <mat-label>Taille des pages</mat-label>
+      <mat-select formControlName="pageSize">
+        <mat-option *ngFor="let size of pageSizes" [value]="size">
+          {{ size }} lignes
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="settings__field settings__field--toggle">
+      <mat-slide-toggle formControlName="enableEmails">
+        Notifications par email
+      </mat-slide-toggle>
+    </div>
+
+    <div class="settings__actions">
+      <button mat-flat-button color="primary" type="submit">
+        <mat-icon aria-hidden="true">save</mat-icon>
+        Enregistrer
+      </button>
+      <span *ngIf="savedMessage" class="settings__saved" role="status">{{ savedMessage }}</span>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,25 @@
+<mat-card class="product-card" [class.is-unavailable]="!product.isAvailable">
+  <mat-card-header class="product-card__header">
+    <div mat-card-avatar class="product-card__avatar" aria-hidden="true">
+      <mat-icon>inventory_2</mat-icon>
+    </div>
+    <mat-card-title class="product-card__title">{{ product.name }}</mat-card-title>
+    <mat-card-subtitle class="product-card__sku">{{ product.sku }} • {{ product.category }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content class="product-card__content">
+    <div class="product-card__price">{{ product.price | currency:'EUR':'symbol':'1.2-2':'fr' }}</div>
+    <div class="product-card__stock" [class.is-low]="product.stock < 10">
+      Stock&nbsp;: <strong>{{ product.stock }}</strong>
+    </div>
+    <div class="product-card__status" *ngIf="!product.isAvailable" role="status">
+      Indisponible
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button mat-button color="primary" type="button" [attr.aria-label]="'Voir ' + product.name">
+      Détails
+    </button>
+  </mat-card-actions>
+</mat-card>

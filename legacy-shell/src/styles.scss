@@ -1,4 +1,117 @@
-/* You can add global styles to this file, and also import other style files */
+/* ============================================================
+   ** POC ** styles globaux du legacy-shell
+   Variables CSS personnalisées + reset léger + breakpoints
+   mobile-first. Ce fichier est volontairement legacy (mélange
+   theme Material prebuilt + variables custom) pour reproduire
+   le contexte d'une app existante.
+   ============================================================ */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+:root {
+  --poc-color-primary: #3f51b5;
+  --poc-color-accent: #ff4081;
+  --poc-color-surface: #ffffff;
+  --poc-color-bg: #f5f6fa;
+  --poc-color-text: #1f2330;
+  --poc-color-text-muted: #5e6470;
+  --poc-color-border: #e3e5ec;
+  --poc-color-success: #2e7d32;
+  --poc-color-warn: #ef6c00;
+  --poc-color-danger: #c62828;
+
+  --poc-radius-sm: 6px;
+  --poc-radius-md: 10px;
+  --poc-radius-lg: 16px;
+
+  --poc-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --poc-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  --poc-space-1: 4px;
+  --poc-space-2: 8px;
+  --poc-space-3: 12px;
+  --poc-space-4: 16px;
+  --poc-space-5: 24px;
+  --poc-space-6: 32px;
+  --poc-space-7: 48px;
+
+  --poc-sidebar-width: 240px;
+  --poc-toolbar-height: 56px;
+
+  --poc-font-base: 16px;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: var(--poc-color-bg);
+  color: var(--poc-color-text);
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: var(--poc-font-base);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: var(--poc-color-primary);
+  text-decoration: none;
+}
+
+a:hover,
+a:focus-visible {
+  text-decoration: underline;
+}
+
+:focus-visible {
+  outline: 3px solid var(--poc-color-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.poc-skip-link {
+  position: absolute;
+  top: -100px;
+  left: var(--poc-space-3);
+  background: var(--poc-color-primary);
+  color: #fff;
+  padding: var(--poc-space-2) var(--poc-space-4);
+  border-radius: var(--poc-radius-sm);
+  z-index: 10000;
+  transition: top 120ms ease-in;
+}
+
+.poc-skip-link:focus {
+  top: var(--poc-space-3);
+}
+
+.poc-page {
+  padding: var(--poc-space-5);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.poc-section-title {
+  margin: 0 0 var(--poc-space-4);
+  font-size: clamp(1.4rem, 1.1rem + 1vw, 1.9rem);
+  font-weight: 600;
+}
+
+/* breakpoints mobile-first custom */
+@media (min-width: 600px) {
+  :root {
+    --poc-font-base: 16px;
+  }
+}
+
+@media (min-width: 900px) {
+  :root {
+    --poc-font-base: 16.5px;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --poc-font-base: 17px;
+  }
+}

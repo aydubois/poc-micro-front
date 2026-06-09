@@ -1,0 +1,17 @@
+<div class="poc-page orders">
+  <h1 class="poc-section-title">Commandes</h1>
+
+  <p class="orders__intro">
+    Liste de commandes mockées — sert à démontrer une route eager avec un
+    composant standalone et des chips Material.
+  </p>
+
+  <p *ngIf="isLoading" class="orders__loading" role="status">Chargement des commandes…</p>
+
+  <div *ngIf="!isLoading" class="orders__grid">
+    <app-order-card
+      *ngFor="let order of orders; trackBy: trackById"
+      [order]="order"
+    ></app-order-card>
+  </div>
+</div>

@@ -1,0 +1,71 @@
+/* Layout racine du legacy : toolbar + sidenav + outlet
+   Styles spécifiques au composant racine, encapsulés. */
+
+:host {
+  display: block;
+  height: 100%;
+}
+
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: var(--poc-toolbar-height);
+  padding: 0 var(--poc-space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--poc-space-3);
+}
+
+.app-toolbar__title {
+  font-size: clamp(1rem, 0.85rem + 0.6vw, 1.25rem);
+  font-weight: 500;
+}
+
+.app-toolbar__spacer {
+  flex: 1 1 auto;
+}
+
+.app-toolbar__menu-btn {
+  display: inline-flex;
+}
+
+.app-shell {
+  height: calc(100vh - var(--poc-toolbar-height));
+}
+
+.app-sidenav {
+  width: var(--poc-sidebar-width);
+  background: var(--poc-color-surface);
+  border-right: 1px solid var(--poc-color-border);
+}
+
+.app-sidenav__list {
+  padding-top: var(--poc-space-2);
+}
+
+.app-sidenav__link {
+  &.is-active {
+    background: rgba(63, 81, 181, 0.08);
+    color: var(--poc-color-primary);
+  }
+}
+
+.app-main {
+  min-height: 100%;
+  padding: 0;
+}
+
+/* Mobile : sidenav un peu plus large pour le confort tactile */
+@media (max-width: 899px) {
+  .app-sidenav {
+    width: 260px;
+  }
+}
+
+/* Desktop : on masque le bouton burger (sidenav toujours visible) */
+@media (min-width: 900px) {
+  .app-toolbar__menu-btn {
+    display: none;
+  }
+}

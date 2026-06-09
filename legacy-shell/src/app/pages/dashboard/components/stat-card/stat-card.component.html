@@ -1,0 +1,12 @@
+<mat-card class="stat-card" [class.is-success]="accent === 'success'" [class.is-warn]="accent === 'warn'">
+  <div class="stat-card__icon" aria-hidden="true">
+    <mat-icon>{{ icon }}</mat-icon>
+  </div>
+  <div class="stat-card__body">
+    <div class="stat-card__label">{{ label }}</div>
+    <div class="stat-card__value">{{ value }}</div>
+    <div class="stat-card__trend" *ngIf="trend !== 'flat'" [attr.aria-label]="trend === 'up' ? 'En hausse' : 'En baisse'">
+      <mat-icon aria-hidden="true">{{ trend === 'up' ? 'trending_up' : 'trending_down' }}</mat-icon>
+    </div>
+  </div>
+</mat-card>
