@@ -11,9 +11,9 @@ Tous les commits sont signés Conventional Commits, le code de POC est commenté
 | Projet | Version | Port | Rôle Native Federation |
 |---|---|---|---|
 | `legacy-shell` | Angular 16 | 4200 | Host (consomme `mfe-stats` + `mfe-notifications`) + Remote (expose `./LegacyApp` web component) |
-| `mfe-stats` | Angular 18 | 4201 | Remote — expose `./Widget` (fond orange) |
-| `mfe-notifications` | Angular 16 | 4202 | Remote — expose `./Widget` (fond violet) |
-| `mfe-stats-v21` | Angular 21 | 4203 | Remote — expose `./Widget` (fond vert), remplace mfe-stats côté shell |
+| `mfe-stats` | Angular 18 | 4201 | Remote — expose `./Widget` + `./StatsElement` (custom element `<mfe-stats>`, fond orange) |
+| `mfe-notifications` | Angular 16 | 4202 | Remote — expose `./Widget` + `./NotificationsElement` (custom element `<mfe-notifications>`, fond violet) |
+| `mfe-stats-v21` | Angular 21 | 4203 | Remote — expose `./Widget` (fond vert), accessible sous la clé `mfeStatsV21` dans le manifest |
 | `shell-modern` | Angular 21 | 4300 | Host (consomme tout, y compris le legacy en custom element) |
 | `shared-bus` | TypeScript pur | — | Lib RxJS singleton attachée à `window` |
 
@@ -23,8 +23,8 @@ Tous les commits sont signés Conventional Commits, le code de POC est commenté
 ┌────────────────────────────────────────────────────────────────┐
 │ shell-modern (A21) — host Native Federation                    │
 │   /login (admin/admin) ─► AuthService ─► shared-bus.user$      │
-│   /stats ─────────► mfe-stats-v21 (A21, widget vert)           │
-│   /notifications ─► mfe-notifications (A16, widget violet)     │
+│   /stats ─────────► <mfe-stats> (A18, widget orange)           │
+│   /notifications ─► <mfe-notifications> (A16, widget violet)   │
 │   /:section ──────► <legacy-app> (custom element A16)          │
 │                       │                                         │
 │                       └─► consomme mfe-stats v18 (orange) +    │
@@ -97,7 +97,7 @@ npm run dev:notif        # mfe-notifications :4202
 | `http://localhost:4300/login` | Auth fake signal-based |
 | `http://localhost:4300/dashboard` | Legacy A16 monté en custom element dans shell A21 |
 | `http://localhost:4300/users` | Legacy avec navigation cross-router (shell ↔ legacy hash) |
-| `http://localhost:4300/stats` | Widget vert v21 chargé via Native Federation |
+| `http://localhost:4300/stats` | Widget orange A18 encapsulé en custom element `<mfe-stats>` |
 | `http://localhost:4300/notifications` | Widget violet A16 encapsulé en custom element `<mfe-notifications>` |
 | `http://localhost:4300/settings` puis Save | Toast émis via CustomEvent du legacy au shell |
 | `http://localhost:4200` | Legacy en standalone (ses micro-frontends embarqués) |
@@ -146,6 +146,20 @@ npm run dev:notif        # mfe-notifications :4202
 9. **CustomEvent `poc:notify`** :
    - Émis par `SettingsComponent` du legacy après save.
    - Écouté par `NotifyService` du shell, affiché en toast en bas à droite avec auto-dismiss.
+
+### Phase 2.7 — mfe-stats encapsulé en web component
+
+Constat post-Phase 2.6 : la page `/stats` du shell pointait sur `mfe-stats-v21` (port 4203, Angular 21) parce qu'avant la migration vers Angular 18 de `mfe-stats`, on avait dû créer une version v21 spécifique pour démontrer le widget Angular 21 dans le shell. Demande utilisateur : remettre `mfe-stats` (Angular 18) à la place.
+
+Comme attendu, charger A18 dans un host A21 via `<app-mfe-outlet>` (`componentFactory.create`) reproduit le NG0203. Même recette qu'au Phase 2.6 :
+
+- `@angular/elements@18` ajouté à `mfe-stats`.
+- `StatsElementModule` (DoBootstrap vide) + `stats-app.element.ts` qui exporte `registerStatsApp()` (bootstrap platform A18 isolé + `customElements.define('mfe-stats', …)` + injection des styles globaux).
+- `federation.config.js` expose `./StatsElement` en plus de `./Widget`.
+- Shell : `StatsHostComponent` calque `NotificationsHostComponent`. `notifications.manifest.json` route maintenant la clé `mfeStats` vers le port 4201 (mfe-stats A18). La clé `mfeStatsV21` est ajoutée pour garder le v21 accessible si besoin (pas câblé à une route par défaut).
+- Page `/stats` montre désormais le widget orange Angular 18.
+
+→ Quatre projets distincts vivent maintenant côte à côte dans le shell A21 : legacy A16 en custom element, mfe-notifications A16 en custom element, mfe-stats A18 en custom element, mfe-stats-v21 A21 chargeable via `<app-mfe-outlet>` standard. Le pattern custom element s'impose comme la solution canonique dès qu'il y a écart de version Angular entre host et remote.
 
 ### Phase 2.6 — mfe-notifications encapsulé en web component
 

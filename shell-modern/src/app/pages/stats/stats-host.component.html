@@ -1,0 +1,20 @@
+<div class="stats-host">
+  @if (!isReady() && !errorMessage()) {
+    <div class="stats-host__status" role="status" aria-live="polite">
+      Chargement du micro-frontend Stats…
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="stats-host__error" role="alert">
+      <strong>Micro-frontend indisponible :</strong> {{ errorMessage() }}
+    </div>
+  }
+
+  @if (isReady()) {
+    <!-- ** POC ** mfe-stats Angular 18 monté ici comme custom element.
+         Le widget vit dans un platform A18 isolé, le shell A21 ne voit
+         qu'un nœud DOM. -->
+    <mfe-stats></mfe-stats>
+  }
+</div>
