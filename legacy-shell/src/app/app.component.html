@@ -1,6 +1,6 @@
-<a class="poc-skip-link" href="#main-content">Aller au contenu principal</a>
+<a *ngIf="!isEmbedded" class="poc-skip-link" href="#main-content">Aller au contenu principal</a>
 
-<mat-toolbar color="primary" class="app-toolbar">
+<mat-toolbar *ngIf="!isEmbedded" color="primary" class="app-toolbar">
   <button
     mat-icon-button
     class="app-toolbar__menu-btn"
@@ -20,8 +20,15 @@
   </button>
 </mat-toolbar>
 
-<mat-sidenav-container class="app-shell">
+<div *ngIf="isEmbedded" class="embed-banner" role="note" aria-label="Indicateur d'encapsulation">
+  <span class="embed-banner__dot" aria-hidden="true"></span>
+  <span class="embed-banner__label">Legacy Angular 16 — encapsulé en Web Component dans le shell Angular 21</span>
+  <span class="embed-banner__tag">&lt;legacy-app&gt;</span>
+</div>
+
+<mat-sidenav-container class="app-shell" [class.is-embedded]="isEmbedded">
   <mat-sidenav
+    *ngIf="!isEmbedded"
     #sidenav
     class="app-sidenav"
     [mode]="'side'"

@@ -32,6 +32,63 @@
 
 .app-shell {
   height: calc(100vh - var(--poc-toolbar-height));
+
+  /* Mode embarqué (custom element dans shell-modern) : pas de toolbar ni
+     sidenav, on prend la pleine hauteur du conteneur parent. */
+  &.is-embedded {
+    height: auto;
+    min-height: 60vh;
+  }
+}
+
+/* Bandeau visible uniquement en mode embarqué pour rappeler à l'œil
+   qu'on regarde l'app legacy montée comme custom element. */
+.embed-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--poc-space-3);
+  padding: var(--poc-space-2) var(--poc-space-4);
+  background: linear-gradient(
+    90deg,
+    rgba(63, 81, 181, 0.12) 0%,
+    rgba(63, 81, 181, 0.05) 100%
+  );
+  border-bottom: 2px dashed var(--poc-color-primary);
+  font-size: 0.8rem;
+  color: var(--poc-color-primary);
+  font-weight: 500;
+}
+
+.embed-banner__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--poc-color-primary);
+  flex-shrink: 0;
+  box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.25);
+  animation: embed-banner-pulse 2.4s ease-in-out infinite;
+}
+
+.embed-banner__label {
+  flex: 1 1 auto;
+}
+
+.embed-banner__tag {
+  font-family: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+  font-size: 0.75rem;
+  background: rgba(63, 81, 181, 0.15);
+  padding: 2px 8px;
+  border-radius: var(--poc-radius-sm);
+}
+
+@keyframes embed-banner-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(63, 81, 181, 0.05);
+  }
 }
 
 .app-sidenav {

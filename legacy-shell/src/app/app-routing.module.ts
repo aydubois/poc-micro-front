@@ -35,7 +35,10 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],
+  // ** POC ** useHash:true permet à ce router de cohabiter avec celui du
+  // shell-modern (Angular 21) quand le legacy est monté en web component :
+  // le shell utilise le path et le legacy utilise le fragment (#).
+  imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules, useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}

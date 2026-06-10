@@ -1,0 +1,35 @@
+:host {
+  display: block;
+}
+
+.legacy-host {
+  min-height: 60vh;
+}
+
+.legacy-host__status {
+  text-align: center;
+  padding: var(--sm-space-5);
+  font-style: italic;
+  color: var(--sm-color-text-muted);
+}
+
+.legacy-host__error {
+  background: rgba(240, 100, 100, 0.12);
+  color: var(--sm-color-danger);
+  border-left: 3px solid var(--sm-color-danger);
+  padding: var(--sm-space-3) var(--sm-space-4);
+  border-radius: var(--sm-radius-sm);
+  font-size: 0.95rem;
+}
+
+/* Le custom element legacy embarque ses propres styles (theme Material 16)
+   via le bundle. On lui donne juste un fond clair pour qu'il ne soit pas
+   illisible sur le fond sombre du shell moderne. */
+legacy-app {
+  display: block;
+  background: #f5f6fa;
+  color: #1f2330;
+  border-radius: var(--sm-radius-md);
+  overflow: hidden;
+  min-height: 60vh;
+}

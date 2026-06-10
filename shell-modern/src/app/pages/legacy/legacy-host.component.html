@@ -1,0 +1,20 @@
+<div class="legacy-host">
+  @if (!isReady() && !errorMessage()) {
+    <div class="legacy-host__status" role="status" aria-live="polite">
+      Chargement de l'application legacy…
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="legacy-host__error" role="alert">
+      <strong>Legacy indisponible :</strong> {{ errorMessage() }}
+    </div>
+  }
+
+  @if (isReady()) {
+    <!-- ** POC ** legacy Angular 16 monté ici comme custom element.
+         L'attribut section synchronise la route interne du legacy avec
+         le paramètre d'URL géré par le router shell. -->
+    <legacy-app [attr.section]="section()"></legacy-app>
+  }
+</div>
