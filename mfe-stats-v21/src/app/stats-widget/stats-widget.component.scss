@@ -1,0 +1,105 @@
+/* ** POC ** fond vert caractéristique du micro-frontend stats v21 —
+   matérialise la migration A16 (orange) vers A21 (vert) */
+
+:host {
+  display: block;
+}
+
+.stats-widget {
+  background: linear-gradient(135deg, #3dd685 0%, #1eab63 100%);
+  color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(30, 171, 99, 0.3);
+}
+
+.stats-widget__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.stats-widget__title {
+  margin: 0;
+  font-size: clamp(1rem, 0.9rem + 0.4vw, 1.2rem);
+  font-weight: 600;
+}
+
+.stats-widget__badge {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+
+.stats-widget__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr;
+}
+
+.stats-widget__item {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  backdrop-filter: blur(2px);
+}
+
+.stats-widget__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.stats-widget__body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.stats-widget__label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.85;
+}
+
+.stats-widget__value {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.stats-widget__delta {
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+@media (min-width: 600px) {
+  .stats-widget__list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .stats-widget__list {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

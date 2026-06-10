@@ -4,12 +4,13 @@
   "private": true,
   "description": "POC d'architecture micro-frontends : tous les projets sont en Native Federation. Legacy Angular 16 (host de transition) + shell moderne Angular 21 (host cible) + micro-frontends.",
   "scripts": {
-    "install:all": "npm --prefix legacy-shell install && npm --prefix mfe-stats install && npm --prefix mfe-notifications install && npm --prefix shell-modern install",
+    "install:all": "npm --prefix legacy-shell install && npm --prefix mfe-stats install && npm --prefix mfe-notifications install && npm --prefix shell-modern install && npm --prefix mfe-stats-v21 install",
     "dev:phase1": "concurrently -n legacy,stats,notif -c blue,yellow,magenta \"npm --prefix legacy-shell run start\" \"npm --prefix mfe-stats run start\" \"npm --prefix mfe-notifications run start\"",
     "dev:phase2": "bash scripts/dev-phase2.sh",
     "dev:legacy": "npm --prefix legacy-shell run start",
     "dev:shell": "npm --prefix shell-modern run start",
     "dev:stats": "npm --prefix mfe-stats run start",
+    "dev:stats-v21": "npm --prefix mfe-stats-v21 run start",
     "dev:notif": "npm --prefix mfe-notifications run start"
   },
   "devDependencies": {

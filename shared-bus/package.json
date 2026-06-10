@@ -1,0 +1,18 @@
+{
+  "name": "shared-bus",
+  "version": "0.1.0",
+  "description": "POC : bus d'événements RxJS partagé via window pour communiquer entre apps de versions Angular différentes.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepare": "tsc"
+  },
+  "peerDependencies": {
+    "rxjs": "^7.8.0"
+  },
+  "devDependencies": {
+    "rxjs": "^7.8.0",
+    "typescript": "^5.1.0"
+  }
+}

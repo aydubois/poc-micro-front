@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ============================================================
-# ** POC ** Lance les 4 applications de la phase 2 en parallèle.
-# - shell-modern (Angular 21) sur Node 24
+# ** POC ** Lance les applications de la phase 2 en parallèle.
+# - shell-modern + mfe-stats-v21 (Angular 21) sur Node 24
 # - legacy-shell, mfe-stats, mfe-notifications (Angular 16) sur Node 18
 # ============================================================
 
@@ -31,9 +31,10 @@ NODE24_BIN="$(dirname "$(which node)")"
 cd "$ROOT"
 
 npx concurrently \
-  -n shell,legacy,stats,notif \
-  -c cyan,blue,yellow,magenta \
+  -n shell,statsV21,legacy,stats,notif \
+  -c cyan,green,blue,yellow,magenta \
   "PATH=$NODE24_BIN:\$PATH npm --prefix shell-modern run start" \
+  "PATH=$NODE24_BIN:\$PATH npm --prefix mfe-stats-v21 run start" \
   "PATH=$NODE18_BIN:\$PATH npm --prefix legacy-shell run start" \
   "PATH=$NODE18_BIN:\$PATH npm --prefix mfe-stats run start" \
   "PATH=$NODE18_BIN:\$PATH npm --prefix mfe-notifications run start"
