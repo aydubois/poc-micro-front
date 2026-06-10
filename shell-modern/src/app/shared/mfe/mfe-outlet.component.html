@@ -1,0 +1,16 @@
+<div class="mfe-outlet" [class.is-loading]="isLoading()" [class.has-error]="!!errorMessage()">
+  @if (isLoading()) {
+    <div class="mfe-outlet__status" role="status" aria-live="polite">
+      Chargement du micro-frontend « {{ remote() }} »…
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="mfe-outlet__error" role="alert">
+      <strong>Micro-frontend indisponible :</strong> {{ errorMessage() }}
+    </div>
+  }
+
+  <!-- ** POC ** point de montage dynamique du composant distant -->
+  <ng-container #host></ng-container>
+</div>

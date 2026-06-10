@@ -1,0 +1,21 @@
+:host {
+  display: block;
+}
+
+.notifications-page__title {
+  margin: 0 0 var(--sm-space-2);
+  font-size: clamp(1.4rem, 1.1rem + 1vw, 1.9rem);
+  font-weight: 600;
+}
+
+.notifications-page__intro {
+  margin: 0 0 var(--sm-space-5);
+  color: var(--sm-color-text-muted);
+
+  code {
+    background: var(--sm-color-surface-elevated);
+    padding: 2px 6px;
+    border-radius: var(--sm-radius-sm);
+    font-size: 0.85em;
+  }
+}

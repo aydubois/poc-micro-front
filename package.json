@@ -1,12 +1,14 @@
 {
   "name": "poc-micro-front",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
-  "description": "POC d'architecture micro-frontends : legacy Angular 16 + shell moderne Angular 21 + MFE Module Federation puis Native Federation",
+  "description": "POC d'architecture micro-frontends : tous les projets sont en Native Federation. Legacy Angular 16 (host de transition) + shell moderne Angular 21 (host cible) + micro-frontends.",
   "scripts": {
-    "install:phase1": "cd legacy-shell && npm install && cd ../mfe-stats && npm install && cd ../mfe-notifications && npm install",
-    "dev:phase1": "concurrently -n shell,stats,notif -c blue,yellow,magenta \"npm --prefix legacy-shell run start\" \"npm --prefix mfe-stats run start\" \"npm --prefix mfe-notifications run start\"",
+    "install:all": "npm --prefix legacy-shell install && npm --prefix mfe-stats install && npm --prefix mfe-notifications install && npm --prefix shell-modern install",
+    "dev:phase1": "concurrently -n legacy,stats,notif -c blue,yellow,magenta \"npm --prefix legacy-shell run start\" \"npm --prefix mfe-stats run start\" \"npm --prefix mfe-notifications run start\"",
+    "dev:phase2": "concurrently -n shell,legacy,stats,notif -c cyan,blue,yellow,magenta \"npm --prefix shell-modern run start\" \"npm --prefix legacy-shell run start\" \"npm --prefix mfe-stats run start\" \"npm --prefix mfe-notifications run start\"",
     "dev:legacy": "npm --prefix legacy-shell run start",
+    "dev:shell": "npm --prefix shell-modern run start",
     "dev:stats": "npm --prefix mfe-stats run start",
     "dev:notif": "npm --prefix mfe-notifications run start"
   },

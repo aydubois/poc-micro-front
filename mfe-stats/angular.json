@@ -40,78 +40,32 @@
 			"prefix": "app",
 			"architect": {
 				"build": {
-					"builder": "ngx-build-plus:browser",
-					"options": {
-						"outputPath": "dist/mfe-stats",
-						"index": "src/index.html",
-						"main": "src/main.ts",
-						"polyfills": [
-							"zone.js"
-						],
-						"tsConfig": "tsconfig.app.json",
-						"inlineStyleLanguage": "scss",
-						"assets": [
-							"src/favicon.ico",
-							"src/assets"
-						],
-						"styles": [
-							"src/styles.scss"
-						],
-						"scripts": [],
-						"extraWebpackConfig": "webpack.config.js",
-						"commonChunk": false
-					},
+					"builder": "@angular-architects/native-federation:build",
+					"options": {},
 					"configurations": {
 						"production": {
-							"budgets": [
-								{
-									"type": "initial",
-									"maximumWarning": "500kb",
-									"maximumError": "1mb"
-								},
-								{
-									"type": "anyComponentStyle",
-									"maximumWarning": "2kb",
-									"maximumError": "4kb"
-								}
-							],
-							"outputHashing": "all",
-							"extraWebpackConfig": "webpack.prod.config.js"
+							"target": "mfe-stats:esbuild:production"
 						},
 						"development": {
-							"buildOptimizer": false,
-							"optimization": false,
-							"vendorChunk": true,
-							"extractLicenses": false,
-							"sourceMap": true,
-							"namedChunks": true
+							"target": "mfe-stats:esbuild:development",
+							"dev": true
 						}
 					},
 					"defaultConfiguration": "production"
 				},
 				"serve": {
-					"builder": "ngx-build-plus:dev-server",
-					"configurations": {
-						"production": {
-							"browserTarget": "mfe-stats:build:production",
-							"extraWebpackConfig": "webpack.prod.config.js"
-						},
-						"development": {
-							"browserTarget": "mfe-stats:build:development"
-						}
-					},
-					"defaultConfiguration": "development",
+					"builder": "@angular-architects/native-federation:build",
 					"options": {
-						"port": 4201,
-						"publicHost": "http://localhost:4201",
-						"extraWebpackConfig": "webpack.config.js"
+						"target": "mfe-stats:esbuild:development",
+						"rebuildDelay": 0,
+						"dev": true,
+						"port": 4201
 					}
 				},
 				"extract-i18n": {
-					"builder": "ngx-build-plus:extract-i18n",
+					"builder": "@angular-devkit/build-angular:extract-i18n",
 					"options": {
-						"browserTarget": "mfe-stats:build",
-						"extraWebpackConfig": "webpack.config.js"
+						"browserTarget": "mfe-stats:build"
 					}
 				},
 				"test": {
@@ -132,6 +86,66 @@
 						],
 						"scripts": []
 					}
+				},
+				"esbuild": {
+					"builder": "@angular-devkit/build-angular:browser-esbuild",
+					"options": {
+						"outputPath": "dist/mfe-stats",
+						"index": "src/index.html",
+						"main": "src/main.ts",
+						"polyfills": [
+							"zone.js",
+							"es-module-shims"
+						],
+						"tsConfig": "tsconfig.app.json",
+						"inlineStyleLanguage": "scss",
+						"assets": [
+							"src/favicon.ico",
+							"src/assets"
+						],
+						"styles": [
+							"src/styles.scss"
+						],
+						"scripts": []
+					},
+					"configurations": {
+						"production": {
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "500kb",
+									"maximumError": "1mb"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "2kb",
+									"maximumError": "4kb"
+								}
+							],
+							"outputHashing": "all"
+						},
+						"development": {
+							"buildOptimizer": false,
+							"optimization": false,
+							"vendorChunk": true,
+							"extractLicenses": false,
+							"sourceMap": true,
+							"namedChunks": true
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"serve-original": {
+					"builder": "@angular-devkit/build-angular:dev-server",
+					"configurations": {
+						"production": {
+							"browserTarget": "mfe-stats:build:production"
+						},
+						"development": {
+							"browserTarget": "mfe-stats:build:development"
+						}
+					},
+					"defaultConfiguration": "development"
 				}
 			}
 		}
