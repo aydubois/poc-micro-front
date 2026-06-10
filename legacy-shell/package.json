@@ -25,6 +25,7 @@
     "@angular/router": "^16.2.0",
     "es-module-shims": "^1.5.12",
     "rxjs": "~7.8.0",
+    "shared-bus": "file:../shared-bus",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"
   },

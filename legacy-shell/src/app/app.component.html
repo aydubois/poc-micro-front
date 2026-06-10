@@ -23,6 +23,9 @@
 <div *ngIf="isEmbedded" class="embed-banner" role="note" aria-label="Indicateur d'encapsulation">
   <span class="embed-banner__dot" aria-hidden="true"></span>
   <span class="embed-banner__label">Legacy Angular 16 — encapsulé en Web Component dans le shell Angular 21</span>
+  <span *ngIf="sharedUser" class="embed-banner__user">
+    👋 {{ sharedUser.displayName }} <span class="embed-banner__via">via shared-bus</span>
+  </span>
   <span class="embed-banner__tag">&lt;legacy-app&gt;</span>
 </div>
 

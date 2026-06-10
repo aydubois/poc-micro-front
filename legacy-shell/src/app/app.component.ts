@@ -1,6 +1,8 @@
-import { Component, Input, OnChanges, SimpleChanges, ViewChild, inject } from '@angular/core'
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, inject } from '@angular/core'
 import { MatSidenav } from '@angular/material/sidenav'
 import { Router } from '@angular/router'
+import { getSharedBus, SharedUser } from 'shared-bus'
+import { Subscription } from 'rxjs'
 
 interface NavItem {
   label: string
@@ -10,31 +12,31 @@ interface NavItem {
 
 /**
  * Composant racine de l'app legacy.
- * Contient le layout principal (toolbar + sidenav + outlet) toujours présent.
+ * Contient le layout principal (toolbar + sidenav + outlet) en mode standalone.
+ * En mode custom element (embarqué dans le shell moderne), la chrome est
+ * masquée et l'utilisateur courant est récupéré du bus partagé.
  *
- * Quand l'app est consommée en custom element par le shell moderne, l'input
- * `section` permet au shell de demander une navigation interne (ex. la route
- * /dashboard devient une demande de section=dashboard côté legacy).
+ * L'input `section` permet au shell parent de demander une navigation interne.
  */
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnChanges {
+export class AppComponent implements OnChanges, OnInit, OnDestroy {
   private readonly router = inject(Router)
+  private readonly bus = getSharedBus()
 
   @ViewChild('sidenav') private sidenav?: MatSidenav
 
   /**
    * ** POC ** Section demandée par le shell parent (en mode custom element).
-   * Synchronisée automatiquement par Angular Elements depuis l'attribut HTML
-   * `section`. Si absent (mode standalone dev), l'utilisateur navigue via
-   * les liens du sidenav comme d'habitude.
    */
   @Input() section: string | null = null
 
   readonly title = 'POC Admin Legacy'
+
+  sharedUser: SharedUser | null = null
 
   readonly navItems: NavItem[] = [
     { label: 'Tableau de bord', path: '/dashboard', icon: 'dashboard' },
@@ -44,14 +46,25 @@ export class AppComponent implements OnChanges {
     { label: 'Paramètres', path: '/settings', icon: 'settings' }
   ]
 
+  private userSub?: Subscription
+
   /**
    * Indique si on tourne en mode embarqué (custom element dans le shell).
-   * On le détecte par la présence d'une valeur sur l'input `section`.
    *
    * @returns true si embarqué, false en standalone.
    */
   get isEmbedded(): boolean {
     return this.section !== null
+  }
+
+  ngOnInit(): void {
+    // ** POC ** Abonnement au bus partagé. Le shell pousse l'utilisateur
+    // dès qu'il se connecte ; le legacy met à jour son affichage en réaction.
+    this.userSub = this.bus.user$.subscribe(user => (this.sharedUser = user))
+  }
+
+  ngOnDestroy(): void {
+    this.userSub?.unsubscribe()
   }
 
   /**

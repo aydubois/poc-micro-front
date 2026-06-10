@@ -73,4 +73,24 @@
   <main id="main-content" class="layout__main" tabindex="-1">
     <router-outlet></router-outlet>
   </main>
+
+  <div class="layout__toasts" aria-live="polite" aria-atomic="true">
+    @for (toast of toasts(); track toast.id) {
+      <div class="layout__toast" [class.is-success]="toast.level === 'success'" [class.is-error]="toast.level === 'error'" [class.is-warning]="toast.level === 'warning'" role="status">
+        <div class="layout__toast-body">
+          <strong class="layout__toast-title">{{ toast.title }}</strong>
+          <p class="layout__toast-text">{{ toast.body }}</p>
+          <span class="layout__toast-source">via CustomEvent · {{ toast.source }}</span>
+        </div>
+        <button
+          type="button"
+          class="layout__toast-close"
+          aria-label="Fermer la notification"
+          (click)="onDismissToast(toast.id)"
+        >
+          ✕
+        </button>
+      </div>
+    }
+  </div>
 </div>

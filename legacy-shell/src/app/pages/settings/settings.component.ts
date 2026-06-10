@@ -56,7 +56,10 @@ export class SettingsComponent {
   savedMessage = ''
 
   /**
-   * Sauvegarde fictive : log la valeur du form et affiche un message éphémère.
+   * Sauvegarde fictive : log la valeur du form, affiche un message local et
+   * émet un CustomEvent `poc:notify` sur window pour informer le shell parent
+   * (consommé en tant que toast). Démontre l'aller cross-app via les
+   * événements DOM en parallèle du bus RxJS partagé.
    */
   onSave(): void {
     if (this.form.invalid) {
@@ -67,5 +70,14 @@ export class SettingsComponent {
     console.info('[SettingsComponent.onSave] valeurs sauvegardées (mock):', value)
     this.savedMessage = 'Paramètres enregistrés (mock).'
     setTimeout(() => (this.savedMessage = ''), 3000)
+
+    window.dispatchEvent(new CustomEvent('poc:notify', {
+      detail: {
+        level: 'success',
+        title: 'Paramètres legacy enregistrés',
+        body: `Application : ${value.appName}, langue : ${value.language}`,
+        source: 'legacy-shell'
+      }
+    }))
   }
 }

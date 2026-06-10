@@ -22,6 +22,7 @@
     "@softarc/native-federation-node": "^3.3.4",
     "es-module-shims": "^1.5.12",
     "rxjs": "~7.8.0",
+    "shared-bus": "file:../shared-bus",
     "tslib": "^2.3.0"
   },
   "devDependencies": {

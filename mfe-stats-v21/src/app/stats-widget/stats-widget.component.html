@@ -1,6 +1,11 @@
 <section class="stats-widget" aria-labelledby="stats-widget-title">
   <header class="stats-widget__header">
-    <h3 id="stats-widget-title" class="stats-widget__title">📊 Statistiques v21 (micro-frontend)</h3>
+    <div class="stats-widget__heading">
+      <h3 id="stats-widget-title" class="stats-widget__title">📊 Statistiques v21 (micro-frontend)</h3>
+      @if (currentUser(); as user) {
+        <p class="stats-widget__greet">Bonjour {{ user.displayName }} 👋 — propagé via shared-bus</p>
+      }
+    </div>
     <span class="stats-widget__badge">mfe-stats-v21 · A21</span>
   </header>
 

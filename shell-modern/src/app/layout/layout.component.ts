@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core'
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router'
 
 import { AuthService } from '../core/auth/auth.service'
+import { NotifyService } from '../core/notify/notify.service'
 
 interface NavItem {
   label: string
@@ -13,7 +14,8 @@ interface NavItem {
 /**
  * Layout principal du shell moderne (post-authentification).
  * Header en haut avec utilisateur courant + déconnexion, sidebar à gauche
- * avec menu Legacy/MFE, outlet à droite.
+ * avec menu Legacy/MFE, outlet à droite. Affiche aussi les toasts globaux
+ * émis par les autres apps via CustomEvent `poc:notify`.
  */
 @Component({
   selector: 'app-layout',
@@ -24,9 +26,11 @@ interface NavItem {
 export class LayoutComponent {
   private readonly auth = inject(AuthService)
   private readonly router = inject(Router)
+  private readonly notify = inject(NotifyService)
 
   readonly isSidebarOpen = signal(true)
   readonly currentUser = this.auth.currentUser
+  readonly toasts = this.notify.toasts
   readonly userInitials = computed(() => {
     const user = this.currentUser()
     if (!user) return ''
@@ -61,5 +65,14 @@ export class LayoutComponent {
   onLogout(): void {
     this.auth.logout()
     this.router.navigateByUrl('/login')
+  }
+
+  /**
+   * Ferme une notification (action sur le bouton fermer).
+   *
+   * @param id Identifiant unique du toast.
+   */
+  onDismissToast(id: number): void {
+    this.notify.dismiss(id)
   }
 }

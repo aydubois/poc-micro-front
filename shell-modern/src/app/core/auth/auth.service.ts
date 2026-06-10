@@ -1,4 +1,5 @@
 import { Injectable, computed, signal } from '@angular/core'
+import { getSharedBus } from 'shared-bus'
 
 import { User } from './user.model'
 
@@ -9,13 +10,24 @@ const STORAGE_KEY = 'poc.shell-modern.user'
  * Le login accepte les identifiants `admin/admin`. L'utilisateur courant est
  * persisté dans localStorage pour survivre aux rafraîchissements. Aucune
  * gestion de token JWT — strict mock pour démontrer l'UX d'authentification.
+ *
+ * À chaque changement d'utilisateur, on pousse l'état dans le bus partagé
+ * (shared-bus.user$) pour que toutes les autres apps (legacy + micro-frontends)
+ * voient instantanément la mise à jour.
  */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private readonly bus = getSharedBus()
   private readonly userState = signal<User | null>(this.readStoredUser())
 
   readonly currentUser = this.userState.asReadonly()
   readonly isAuthenticated = computed(() => this.userState() !== null)
+
+  constructor() {
+    // ** POC ** au démarrage, on pousse l'utilisateur persisté (s'il existe)
+    // dans le bus pour que les apps qui se chargent ensuite y aient accès.
+    this.bus.user$.next(this.userState())
+  }
 
   /**
    * Tente une connexion fake. Seul `admin/admin` est accepté.
@@ -36,6 +48,7 @@ export class AuthService {
     }
     this.userState.set(user)
     this.persistUser(user)
+    this.bus.user$.next(user)
     return true
   }
 
@@ -45,6 +58,7 @@ export class AuthService {
   logout(): void {
     this.userState.set(null)
     this.persistUser(null)
+    this.bus.user$.next(null)
   }
 
   /**
