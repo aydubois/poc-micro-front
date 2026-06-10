@@ -2,7 +2,9 @@
   <h1 class="notifications-page__title">Notifications (micro-frontend)</h1>
   <p class="notifications-page__intro">
     Widget chargé dynamiquement depuis <code>mfe-notifications</code>
-    (Angular 16) via Native Federation.
+    (Angular 16) via Native Federation, encapsulé dans le custom element
+    <code>&lt;mfe-notifications&gt;</code> pour isoler son platform Angular 16
+    du shell Angular 21.
   </p>
-  <app-mfe-outlet remote="mfeNotifications"></app-mfe-outlet>
+  <app-notifications-host></app-notifications-host>
 </div>

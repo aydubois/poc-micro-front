@@ -1,0 +1,20 @@
+<div class="notifications-host">
+  @if (!isReady() && !errorMessage()) {
+    <div class="notifications-host__status" role="status" aria-live="polite">
+      Chargement du micro-frontend Notifications…
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="notifications-host__error" role="alert">
+      <strong>Micro-frontend indisponible :</strong> {{ errorMessage() }}
+    </div>
+  }
+
+  @if (isReady()) {
+    <!-- ** POC ** mfe-notifications Angular 16 monté ici comme custom
+         element. Le widget vit dans un platform A16 isolé, le shell A21
+         ne voit qu'un nœud DOM. -->
+    <mfe-notifications></mfe-notifications>
+  }
+</div>

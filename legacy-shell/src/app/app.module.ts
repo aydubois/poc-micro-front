@@ -1,6 +1,4 @@
-import { registerLocaleData } from '@angular/common'
-import localeFr from '@angular/common/locales/fr'
-import { LOCALE_ID, NgModule } from '@angular/core'
+import { NgModule } from '@angular/core'
 import { MatButtonModule } from '@angular/material/button'
 import { MatIconModule } from '@angular/material/icon'
 import { MatListModule } from '@angular/material/list'
@@ -14,17 +12,16 @@ import { AppComponent } from './app.component'
 import { DashboardModule } from './pages/dashboard/dashboard.module'
 import { OrdersComponent } from './pages/orders/orders.component'
 
-// ** POC ** Enregistre la locale fr pour le pipe currency utilisé par
-// Products/Orders. En mode embarqué via Native Federation, l'auto-chargement
-// des locales d'Angular ne s'applique pas — on inscrit explicitement la
-// donnée au démarrage du module.
-registerLocaleData(localeFr, 'fr')
-
 /**
  * Module racine du legacy-shell.
  * Importe les modules Material utilisés par le layout (toolbar + sidenav),
  * la feature Dashboard en eager (DashboardModule), et le composant Orders
  * en eager (standalone importé directement).
+ *
+ * ** POC ** On n'enregistre PAS la locale fr ici car `@angular/common/locales/fr`
+ * n'est pas dans le share scope du shim ES module quand le legacy est consommé
+ * par le shell. À la place, on utilise le format devise par défaut sans préciser
+ * le paramètre `'fr'` dans les pipes currency des templates.
  */
 @NgModule({
   declarations: [AppComponent],
@@ -40,9 +37,7 @@ registerLocaleData(localeFr, 'fr')
     DashboardModule,
     OrdersComponent
   ],
-  providers: [
-    { provide: LOCALE_ID, useValue: 'fr' }
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

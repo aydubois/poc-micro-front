@@ -98,7 +98,7 @@ npm run dev:notif        # mfe-notifications :4202
 | `http://localhost:4300/dashboard` | Legacy A16 monté en custom element dans shell A21 |
 | `http://localhost:4300/users` | Legacy avec navigation cross-router (shell ↔ legacy hash) |
 | `http://localhost:4300/stats` | Widget vert v21 chargé via Native Federation |
-| `http://localhost:4300/notifications` | Widget violet A16 consommé par host A21 |
+| `http://localhost:4300/notifications` | Widget violet A16 encapsulé en custom element `<mfe-notifications>` |
 | `http://localhost:4300/settings` puis Save | Toast émis via CustomEvent du legacy au shell |
 | `http://localhost:4200` | Legacy en standalone (ses micro-frontends embarqués) |
 | `http://localhost:4201` | mfe-stats Angular 18 preview standalone |
@@ -146,6 +146,20 @@ npm run dev:notif        # mfe-notifications :4202
 9. **CustomEvent `poc:notify`** :
    - Émis par `SettingsComponent` du legacy après save.
    - Écouté par `NotifyService` du shell, affiché en toast en bas à droite avec auto-dismiss.
+
+### Phase 2.6 — mfe-notifications encapsulé en web component
+
+Après la migration de `mfe-stats` vers Angular 18, charger `mfe-notifications` (Angular 16) dans le shell Angular 21 via `componentFactory.create` s'est mis à jeter `NG0203: inject() must be called from an injection context`. Cause racine : le passage de `mfe-stats` en A18 + le retrait de `initFederation()` du legacy embarqué (pour stopper les `Rejected map override`) ont fait sauter le platform A16 sur lequel le widget standalone s'appuyait. Sans platform A16 actif côté shell, `getStandaloneInjector` ne trouve plus son parent.
+
+Solution : appliquer à `mfe-notifications` la même recette qu'au legacy — l'encapsuler dans un **custom element avec son propre platform Angular 16 isolé**.
+
+- `@angular/elements@16` ajouté.
+- `NotificationsElementModule` (NgModule sans bootstrap) qui réimporte `BrowserModule` + `NotificationsWidgetComponent`.
+- `notifications-app.element.ts` exporte `registerNotificationsApp()` : bootstrap manuel d'un platform A16, `createCustomElement(NotificationsWidgetComponent)`, `customElements.define('mfe-notifications', …)`, injection des styles globaux du micro-frontend dans le `<head>` du shell.
+- `federation.config.js` du micro-frontend expose maintenant `./NotificationsElement` (en plus de `./Widget` conservé pour rétro-compat).
+- Côté shell, `NotificationsHostComponent` calque `LegacyHostComponent` : `loadRemoteModule('mfeNotifications', './NotificationsElement')` puis `registerNotificationsApp()` puis rend `<mfe-notifications></mfe-notifications>`. La page `/notifications` n'utilise plus `<app-mfe-outlet>`.
+
+→ Plus aucune négociation de share scope cross-version pour ce micro-frontend : le shell A21 ne voit qu'un nœud DOM, le widget vit dans son propre sandbox Angular 16. C'est le **troisième pattern d'intégration** démontré par le POC, à côté du `<app-mfe-outlet>` (factory.create, ok seulement si même version Angular) et de Native Federation pure (cohabitation impossible cross-version dans une même runtime).
 
 ### Phase 2.5 — Étape intermédiaire Angular 18 pour mfe-stats
 
@@ -199,4 +213,5 @@ La présence simultanée des trois versions Angular dans le POC (16, 18, 21) pro
 - **Pas de Shadow DOM** sur le custom element legacy — tenté mais abandonné. Avec `ViewEncapsulation.ShadowDom` sur AppComponent, les composants Material 16 enfants en encapsulation Emulated continuent d'injecter leurs styles dans `document.head`, qui n'est plus accessible depuis le shadow root → tout l'arbre Material apparaît non stylé. Pour activer ShadowDom proprement il faudrait basculer chaque composant Material en `ViewEncapsulation.ShadowDom`, ce qui sort du périmètre du POC. À la place, les styles globaux du legacy sont injectés dans le `<head>` du shell par `legacy-app.element.ts`. Conséquence : les overlays Material (MatDialog, MatSelect dropdown) peuvent fuir visuellement entre le shell et le legacy.
 - **`theme$` du shared-bus non câblé à l'UI** — la lib l'expose mais pas de toggle dans l'interface. Ajout trivial si besoin.
 - **Legacy embarqué ne consomme plus aucun micro-frontend** — la migration de `mfe-stats` vers Angular 18 a révélé que Native Federation ne tolère pas le partage cross-version d'un même package Angular dans une même runtime. Symptômes : `Rejected map override "@angular/common"` côté shim ES module, puis `TypeError: fn is not a function` dans `ɵɵdefineComponent` quand le widget A18 tente de s'initialiser dans le runtime A16 du legacy. Conséquence : les `<app-mfe-outlet>` ont été retirés des pages Dashboard et Users du legacy. Les widgets restent accessibles via les routes `/stats` et `/notifications` du shell moderne. C'est le constat majeur du POC : **Native Federation tolère la cohabitation cross-version via runtimes isolées (custom element du legacy + remotes A21 séparés) mais pas le share scope cross-version dans une même runtime.**
+- **`componentFactory.create` cross-version cassé après la migration de mfe-stats en A18** — le shell A21 chargeait `NotificationsWidgetComponent` (A16, standalone) via `<app-mfe-outlet>` avec un `factory.create()`. Tant que tous les micro-frontends étaient en A16 et que `initFederation()` tournait dans le legacy, un platform A16 unique gardait le composant fonctionnel par effet de bord. La double bascule (mfe-stats en A18 + retrait d'`initFederation()` du legacy embarqué) a tué cet équilibre → `NG0203: inject() must be called from an injection context` sur `/notifications`. Correctif : `mfe-notifications` est désormais consommé en custom element `<mfe-notifications>` avec son propre platform A16 isolé (cf. Phase 2.6). **Leçon** : le pattern `<app-mfe-outlet>` ne fonctionne de façon fiable que si remote et host partagent la même version majeure d'Angular ; sinon il faut passer par un custom element.
 - **Auth fake non-sécurisé** — pas de JWT, juste un objet en localStorage. Strict mock pour le POC.

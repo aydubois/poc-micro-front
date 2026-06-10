@@ -8,7 +8,7 @@
   </mat-card-header>
 
   <mat-card-content class="product-card__content">
-    <div class="product-card__price">{{ product.price | currency:'EUR':'symbol':'1.2-2':'fr' }}</div>
+    <div class="product-card__price">{{ product.price | currency:'EUR':'symbol':'1.2-2' }}</div>
     <div class="product-card__stock" [class.is-low]="product.stock < 10">
       Stock&nbsp;: <strong>{{ product.stock }}</strong>
     </div>
