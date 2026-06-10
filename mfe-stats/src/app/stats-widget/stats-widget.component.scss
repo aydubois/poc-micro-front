@@ -16,16 +16,28 @@
 .stats-widget__header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   margin-bottom: 16px;
   flex-wrap: wrap;
+}
+
+.stats-widget__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .stats-widget__title {
   margin: 0;
   font-size: clamp(1rem, 0.9rem + 0.4vw, 1.2rem);
   font-weight: 600;
+}
+
+.stats-widget__greet {
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.9;
 }
 
 .stats-widget__badge {

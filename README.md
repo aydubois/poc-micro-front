@@ -1,6 +1,6 @@
-# POC Micro-Frontends — Angular 16 → Angular 21
+# POC Micro-Frontends — Angular 16 → Angular 18 → Angular 21
 
-POC validant en deux phases la faisabilité d'une architecture micro-frontends et la migration progressive d'une app legacy Angular 16 vers un shell moderne Angular 21.
+POC validant en deux phases la faisabilité d'une architecture micro-frontends et la migration progressive d'une app legacy Angular 16 vers un shell moderne Angular 21, avec une version intermédiaire Angular 18 pour démontrer la trajectoire de mise à niveau pas-à-pas.
 
 Tous les commits sont signés Conventional Commits, le code de POC est commenté `** POC **` partout où c'est pédagogique.
 
@@ -11,7 +11,7 @@ Tous les commits sont signés Conventional Commits, le code de POC est commenté
 | Projet | Version | Port | Rôle Native Federation |
 |---|---|---|---|
 | `legacy-shell` | Angular 16 | 4200 | Host (consomme `mfe-stats` + `mfe-notifications`) + Remote (expose `./LegacyApp` web component) |
-| `mfe-stats` | Angular 16 | 4201 | Remote — expose `./Widget` (fond orange) |
+| `mfe-stats` | Angular 18 | 4201 | Remote — expose `./Widget` (fond orange) |
 | `mfe-notifications` | Angular 16 | 4202 | Remote — expose `./Widget` (fond violet) |
 | `mfe-stats-v21` | Angular 21 | 4203 | Remote — expose `./Widget` (fond vert), remplace mfe-stats côté shell |
 | `shell-modern` | Angular 21 | 4300 | Host (consomme tout, y compris le legacy en custom element) |
@@ -27,7 +27,7 @@ Tous les commits sont signés Conventional Commits, le code de POC est commenté
 │   /notifications ─► mfe-notifications (A16, widget violet)     │
 │   /:section ──────► <legacy-app> (custom element A16)          │
 │                       │                                         │
-│                       └─► consomme mfe-stats v16 (orange) +    │
+│                       └─► consomme mfe-stats v18 (orange) +    │
 │                           mfe-notifications dans ses pages     │
 │                                                                 │
 │   Toasts ◄── CustomEvent 'poc:notify' (depuis legacy Settings) │
@@ -38,7 +38,7 @@ Tous les commits sont signés Conventional Commits, le code de POC est commenté
 
 ## Prérequis
 
-- **Node 18** pour Angular 16 (legacy-shell, mfe-stats, mfe-notifications)
+- **Node 18** pour Angular 16 et Angular 18 (legacy-shell, mfe-stats, mfe-notifications)
 - **Node 24** pour Angular 21 (shell-modern, mfe-stats-v21)
 - **nvm** pour switcher facilement entre les deux
 
@@ -62,7 +62,7 @@ npm run install:all
 
 ## Lancement
 
-### Phase 1 (legacy + 2 micro-frontends Angular 16)
+### Phase 1 (legacy + 2 micro-frontends Angular 16/18)
 
 ```bash
 npm run dev:phase1
@@ -83,7 +83,7 @@ Ouvre <http://localhost:4300>. Connexion : `admin` / `admin`.
 ```bash
 npm run dev:shell        # shell-modern :4300
 npm run dev:legacy       # legacy-shell :4200
-npm run dev:stats        # mfe-stats v16 :4201
+npm run dev:stats        # mfe-stats v18 :4201
 npm run dev:stats-v21    # mfe-stats-v21 :4203
 npm run dev:notif        # mfe-notifications :4202
 ```
@@ -101,7 +101,7 @@ npm run dev:notif        # mfe-notifications :4202
 | `http://localhost:4300/notifications` | Widget violet A16 consommé par host A21 |
 | `http://localhost:4300/settings` puis Save | Toast émis via CustomEvent du legacy au shell |
 | `http://localhost:4200` | Legacy en standalone (ses micro-frontends embarqués) |
-| `http://localhost:4201` | mfe-stats v16 preview standalone |
+| `http://localhost:4201` | mfe-stats Angular 18 preview standalone |
 | `http://localhost:4202` | mfe-notifications preview standalone |
 | `http://localhost:4203` | mfe-stats-v21 preview standalone |
 
@@ -114,7 +114,7 @@ npm run dev:notif        # mfe-notifications :4202
 1. **legacy-shell** scaffoldé en Angular 16 avec Angular Material + MatLegacy.
    - 5 routes mixant tous les cas : Dashboard (eager + NgModule), Users (lazy + NgModule + MatLegacyTable), Products (lazy + standalone), Orders (eager + standalone + MatLegacyCard), Settings (lazy + standalone + Reactive Form).
    - Layout sidenav + toolbar, services mock in-memory, styles globaux SCSS + styles par composant.
-2. **mfe-stats** et **mfe-notifications** scaffoldés en remotes Module Federation.
+2. **mfe-stats** et **mfe-notifications** scaffoldés en remotes Module Federation Angular 16.
 3. **Façade MFE** : `MfeFacadeService` + `MfeOutletComponent` chargent dynamiquement les remotes via `loadRemoteModule({ type: 'module' })`.
 4. **Validation runtime** : widgets orange (stats) et violet (notifications) s'affichent bien dans Dashboard et Users.
 
@@ -147,6 +147,20 @@ npm run dev:notif        # mfe-notifications :4202
    - Émis par `SettingsComponent` du legacy après save.
    - Écouté par `NotifyService` du shell, affiché en toast en bas à droite avec auto-dismiss.
 
+### Phase 2.5 — Étape intermédiaire Angular 18 pour mfe-stats
+
+Pour démontrer une trajectoire de mise à niveau progressive plutôt que big-bang, le micro-frontend `mfe-stats` a été montré de version de Angular 16 à **Angular 18** :
+
+- Reconstruit avec `ng new` Angular 18 (esbuild, standalone par défaut).
+- `@angular-architects/native-federation@18.2.7` en remote, expose le même `./Widget` qu'avant.
+- Composant modernisé : control flow `@if`/`@for` (introduit en A17), `signal`, `takeUntilDestroyed`, `DestroyRef` injecté.
+- Suppression des `*ngFor` et `trackBy` au profit de `@for (... ; track ...)`.
+- shared-bus consommé via signal pour saluer l'utilisateur dans le header du widget.
+- Badge interne `mfe-stats · A18` pour repérer la version à l'œil.
+- Native Federation v18 → tous les remotes (`mfe-stats` v18, `mfe-notifications` v16, `mfe-stats-v21`) cohabitent sans modifier le shell A21 ni le legacy A16 : Native Federation produit des ES modules indépendants des versions Angular embarquées.
+
+→ Démontre qu'un host A21 peut consommer simultanément du A16, du A18 et du A21 via Native Federation, ce qui valide la stratégie de montée de version pas-à-pas.
+
 ---
 
 ## Apprentissages techniques (commentés `** POC **` dans le code)
@@ -155,10 +169,10 @@ npm run dev:notif        # mfe-notifications :4202
 Angular 21 est zoneless par défaut. Pour héberger un Angular 16, il faut ajouter `"zone.js"` aux polyfills du shell — sinon `NG0908: In this configuration Angular requires Zone.js`.
 
 ### Format `remoteEntry`
-Avec Angular 16 + `@angular-architects/native-federation@16`, le builder switche en `esbuild` et produit un `remoteEntry.json` (manifest format) avec des chunks ES modules. Compatible directement avec un host Angular 21.
+Avec Angular 16/18 + `@angular-architects/native-federation`, le builder switche en `esbuild` et produit un `remoteEntry.json` (manifest format) avec des chunks ES modules. Compatible directement avec un host Angular 21.
 
 ### Trois runtimes Native Federation cohabitent
-`@angular-architects/native-federation` v16 et v21 sont deux packages npm distincts au runtime. Chaque host (shell, legacy standalone, legacy embarqué) a sa propre runtime et fetch ses chunks indépendamment. C'est le prix de la transition progressive.
+`@angular-architects/native-federation` v16, v18 et v21 sont des packages npm distincts au runtime. Chaque host (shell, legacy standalone, legacy embarqué) a sa propre runtime et fetch ses chunks indépendamment. C'est le prix de la transition progressive.
 
 ### Cohabitation des routers
 `useHash: true` côté legacy = le shell utilise le path, le legacy utilise le fragment. Plus de conflit `popstate`.
@@ -173,7 +187,10 @@ Avec Angular 16 + `@angular-architects/native-federation@16`, le builder switche
 La lib doit être buildée en ES module (`tsconfig.module: "ES2020"` + `package.json.type: "module"`) pour que esbuild du shell A21 puisse extraire les named exports.
 
 ### Node versions
-Angular 16 sur Node 18, Angular 21 sur Node 24. `scripts/dev-phase2.sh` capture le `PATH` de chaque version puis override par commande dans `concurrently`.
+Angular 16/18 sur Node 18, Angular 21 sur Node 24. `scripts/dev-phase2.sh` capture le `PATH` de chaque version puis override par commande dans `concurrently`.
+
+### Migration progressive
+La présence simultanée des trois versions Angular dans le POC (16, 18, 21) prouve qu'on peut moderniser un micro-frontend après l'autre **sans toucher au reste** : tant que l'API exposée (`./Widget`) reste stable, le contrat Native Federation est respecté.
 
 ---
 
@@ -181,25 +198,5 @@ Angular 16 sur Node 18, Angular 21 sur Node 24. `scripts/dev-phase2.sh` capture 
 
 - **Pas de Shadow DOM** sur le custom element legacy — on injecte la feuille de styles globalement dans le `<head>` du shell. Les overlays Material (MatDialog, MatSelect dropdown) peuvent fuir hors du conteneur visuel du legacy.
 - **`theme$` du shared-bus non câblé à l'UI** — la lib l'expose mais pas de toggle dans l'interface. Ajout trivial si besoin.
-- **Legacy embarqué consomme toujours `mfe-stats` v16** dans son propre manifest. Pour démontrer la migration jusqu'au bout, on pourrait le faire pointer aussi sur la v21.
+- **Legacy embarqué consomme toujours `mfe-stats`** dans son propre manifest. Pour démontrer la migration jusqu'au bout côté legacy aussi, on pourrait pointer son manifest sur la v21.
 - **Auth fake non-sécurisé** — pas de JWT, juste un objet en localStorage. Strict mock pour le POC.
-
----
-
-## Conventions de code
-
-- TypeScript strict, pas de `any`, typage explicite partout.
-- Pas de `;` de fin de ligne en TS applicatif (sauf imports et `*.spec.ts`).
-- Angular 16 → `*ngIf` / `*ngFor` (control flow `@if`/`@for` introduit en 17).
-- Angular 21 → `@if` / `@for` / signals / `input.required()` / `takeUntilDestroyed`.
-- JSDoc en français sur chaque méthode.
-- Tous les fichiers Angular en `kebab-case` avec suffixe `.component.ts`, `.service.ts`, etc.
-- Tous les bouts de code propres au POC architecture sont préfixés `** POC **` en commentaire pour faciliter la relecture.
-
----
-
-## Repo
-
-<https://github.com/aydubois/poc-micro-front>
-
-Commits thématiques (un par tâche), tous signés Conventional Commits, signature `Co-Authored-By` pour la collaboration avec l'assistant.

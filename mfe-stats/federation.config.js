@@ -1,7 +1,7 @@
 /* ============================================================
-   ** POC ** federation.config.js — micro-frontend stats (Angular 16)
-   Buildé en Native Federation pour être consommé par shell-modern.
-   Expose un seul module : ./Widget → StatsWidgetComponent (standalone).
+   ** POC ** federation.config.js — micro-frontend stats (Angular 18)
+   Buildé en Native Federation pour être consommé par tous les hosts
+   (legacy-shell A16, shell-modern A21). Expose ./Widget.
    ============================================================ */
 
 const { withNativeFederation, shareAll } = require('@angular-architects/native-federation/config')
