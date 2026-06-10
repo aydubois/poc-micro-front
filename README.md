@@ -196,7 +196,7 @@ La présence simultanée des trois versions Angular dans le POC (16, 18, 21) pro
 
 ## Limites connues du POC
 
-- **Pas de Shadow DOM** sur le custom element legacy — on injecte la feuille de styles globalement dans le `<head>` du shell. Les overlays Material (MatDialog, MatSelect dropdown) peuvent fuir hors du conteneur visuel du legacy.
+- **Pas de Shadow DOM** sur le custom element legacy — tenté mais abandonné. Avec `ViewEncapsulation.ShadowDom` sur AppComponent, les composants Material 16 enfants en encapsulation Emulated continuent d'injecter leurs styles dans `document.head`, qui n'est plus accessible depuis le shadow root → tout l'arbre Material apparaît non stylé. Pour activer ShadowDom proprement il faudrait basculer chaque composant Material en `ViewEncapsulation.ShadowDom`, ce qui sort du périmètre du POC. À la place, les styles globaux du legacy sont injectés dans le `<head>` du shell par `legacy-app.element.ts`. Conséquence : les overlays Material (MatDialog, MatSelect dropdown) peuvent fuir visuellement entre le shell et le legacy.
 - **`theme$` du shared-bus non câblé à l'UI** — la lib l'expose mais pas de toggle dans l'interface. Ajout trivial si besoin.
 - **Legacy embarqué consomme toujours `mfe-stats`** dans son propre manifest. Pour démontrer la migration jusqu'au bout côté legacy aussi, on pourrait pointer son manifest sur la v21.
 - **Auth fake non-sécurisé** — pas de JWT, juste un objet en localStorage. Strict mock pour le POC.
