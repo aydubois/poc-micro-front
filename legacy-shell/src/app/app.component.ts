@@ -17,6 +17,16 @@ interface NavItem {
  * masquée et l'utilisateur courant est récupéré du bus partagé.
  *
  * L'input `section` permet au shell parent de demander une navigation interne.
+ *
+ * ** POC ** Note sur le Shadow DOM : on n'utilise PAS
+ * `ViewEncapsulation.ShadowDom` sur ce composant racine. Tester a montré
+ * que les composants enfants en encapsulation `Emulated` (par défaut)
+ * injectent leurs styles dans `document.head`, qui n'est plus accessible
+ * depuis le shadow root → tout l'arbre Material apparaîtrait non stylé.
+ * Pour activer ShadowDom proprement il faudrait basculer chaque composant
+ * Material (et tout le code app) en encapsulation ShadowDom, ce qui sort
+ * du périmètre du POC. À la place, les styles globaux du legacy sont
+ * injectés dans le `<head>` du shell par `legacy-app.element.ts`.
  */
 @Component({
   selector: 'app-root',
@@ -58,8 +68,6 @@ export class AppComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // ** POC ** Abonnement au bus partagé. Le shell pousse l'utilisateur
-    // dès qu'il se connecte ; le legacy met à jour son affichage en réaction.
     this.userSub = this.bus.user$.subscribe(user => (this.sharedUser = user))
   }
 

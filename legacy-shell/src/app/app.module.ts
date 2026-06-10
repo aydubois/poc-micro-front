@@ -1,4 +1,6 @@
-import { NgModule } from '@angular/core'
+import { registerLocaleData } from '@angular/common'
+import localeFr from '@angular/common/locales/fr'
+import { LOCALE_ID, NgModule } from '@angular/core'
 import { MatButtonModule } from '@angular/material/button'
 import { MatIconModule } from '@angular/material/icon'
 import { MatListModule } from '@angular/material/list'
@@ -11,6 +13,12 @@ import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import { DashboardModule } from './pages/dashboard/dashboard.module'
 import { OrdersComponent } from './pages/orders/orders.component'
+
+// ** POC ** Enregistre la locale fr pour le pipe currency utilisé par
+// Products/Orders. En mode embarqué via Native Federation, l'auto-chargement
+// des locales d'Angular ne s'applique pas — on inscrit explicitement la
+// donnée au démarrage du module.
+registerLocaleData(localeFr, 'fr')
 
 /**
  * Module racine du legacy-shell.
@@ -32,7 +40,9 @@ import { OrdersComponent } from './pages/orders/orders.component'
     DashboardModule,
     OrdersComponent
   ],
-  providers: [],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'fr' }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

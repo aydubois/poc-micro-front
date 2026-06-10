@@ -1,5 +1,5 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core'
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { Component, OnDestroy, OnInit, signal } from '@angular/core'
+import { Subscription } from 'rxjs'
 import { getSharedBus, SharedUser } from 'shared-bus'
 
 interface StatItem {
@@ -12,9 +12,13 @@ interface StatItem {
 /**
  * Widget exposé par le micro-frontend mfe-stats (Angular 18).
  * Composant standalone signal-friendly — chargé dynamiquement par les hosts
- * via Native Federation. Fond orange caractéristique pour bien le repérer.
+ * via Native Federation. Fond orange caractéristique.
  *
  * Lit l'utilisateur courant via shared-bus pour personnaliser l'en-tête.
+ *
+ * ** POC ** On utilise un Subscription classique au lieu de
+ * `takeUntilDestroyed` car `@angular/core/rxjs-interop` n'est pas dans
+ * l'import map généré par Native Federation côté hosts cross-version.
  */
 @Component({
   selector: 'app-stats-widget',
@@ -22,8 +26,7 @@ interface StatItem {
   templateUrl: './stats-widget.component.html',
   styleUrls: ['./stats-widget.component.scss']
 })
-export class StatsWidgetComponent {
-  private readonly destroyRef = inject(DestroyRef)
+export class StatsWidgetComponent implements OnInit, OnDestroy {
   private readonly bus = getSharedBus()
 
   readonly currentUser = signal<SharedUser | null>(this.bus.user$.value)
@@ -34,9 +37,13 @@ export class StatsWidgetComponent {
     { label: 'Temps moyen', value: '3 min 42', delta: '-15 s / 7j', icon: '⏱️' }
   ]
 
-  constructor() {
-    this.bus.user$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(user => this.currentUser.set(user))
+  private userSub?: Subscription
+
+  ngOnInit(): void {
+    this.userSub = this.bus.user$.subscribe(user => this.currentUser.set(user))
+  }
+
+  ngOnDestroy(): void {
+    this.userSub?.unsubscribe()
   }
 }
