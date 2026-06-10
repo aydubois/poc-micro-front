@@ -29,12 +29,15 @@
     ></app-stat-card>
   </section>
 
-  <!-- ** POC ** widget MFE Stats chargé dynamiquement via la façade -->
-  <section class="dashboard__mfe" aria-label="Statistiques avancées (MFE)">
-    <app-mfe-outlet
-      remote="mfeStats"
-      module="./Widget"
-      componentName="StatsWidgetComponent"
-    ></app-mfe-outlet>
+  <!-- ** POC ** Emplacement micro-frontend Stats retiré : depuis la migration
+       de mfe-stats vers Angular 18, le legacy Angular 16 ne peut plus
+       l'héberger (cross-version sharing de @angular/core impossible). La
+       feature est maintenant exposée directement par le shell moderne sur
+       la route /stats. Voir README, section "Limites connues". -->
+  <section class="dashboard__mfe-disabled" aria-label="Statistiques avancées (déplacé vers le shell)">
+    <p class="dashboard__mfe-disabled-text">
+      Les statistiques avancées sont désormais accessibles via la route
+      <strong>/stats</strong> du shell moderne (widget mfe-stats-v21).
+    </p>
   </section>
 </div>
