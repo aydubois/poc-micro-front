@@ -1,0 +1,65 @@
+<a class="sm-skip-link" href="#main-content">Aller au contenu principal</a>
+
+<div class="layout" [class.is-sidebar-collapsed]="!isSidebarOpen()">
+  <header class="layout__header" role="banner">
+    <button
+      type="button"
+      class="layout__menu-btn"
+      aria-label="Basculer le menu"
+      (click)="toggleSidebar()"
+    >
+      ☰
+    </button>
+    <div class="layout__brand">
+      <span class="layout__brand-icon" aria-hidden="true">⚡</span>
+      <span class="layout__brand-name">Shell Modern</span>
+      <span class="layout__brand-badge">A21 · NF</span>
+    </div>
+
+    <div class="layout__spacer"></div>
+
+    <div class="layout__user">
+      <span class="layout__user-name">À connecter</span>
+    </div>
+  </header>
+
+  <aside class="layout__sidebar" role="navigation" aria-label="Navigation principale">
+    <nav class="layout__nav">
+      <div class="layout__nav-group">
+        <span class="layout__nav-group-title">Legacy A16</span>
+        @for (item of navItems; track item.path) {
+          @if (item.group === 'legacy') {
+            <a
+              class="layout__nav-link"
+              [routerLink]="item.path"
+              routerLinkActive="is-active"
+            >
+              <span class="layout__nav-icon" aria-hidden="true">{{ item.icon }}</span>
+              <span>{{ item.label }}</span>
+            </a>
+          }
+        }
+      </div>
+
+      <div class="layout__nav-group">
+        <span class="layout__nav-group-title">MFE</span>
+        @for (item of navItems; track item.path) {
+          @if (item.group === 'mfe') {
+            <a
+              class="layout__nav-link"
+              [routerLink]="item.path"
+              routerLinkActive="is-active"
+            >
+              <span class="layout__nav-icon" aria-hidden="true">{{ item.icon }}</span>
+              <span>{{ item.label }}</span>
+            </a>
+          }
+        }
+      </div>
+    </nav>
+  </aside>
+
+  <main id="main-content" class="layout__main" tabindex="-1">
+    <router-outlet></router-outlet>
+  </main>
+</div>

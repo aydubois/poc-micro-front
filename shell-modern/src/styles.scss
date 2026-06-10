@@ -1,0 +1,97 @@
+/* ============================================================
+   ** POC ** styles globaux shell-modern (A21)
+   Variables design moderne — AUCUN style legacy hérité du
+   legacy-shell. Le shell est volontairement minimal et propre.
+   ============================================================ */
+
+:root {
+  --sm-color-bg: #0f1424;
+  --sm-color-surface: #1a2138;
+  --sm-color-surface-elevated: #232c4a;
+  --sm-color-border: #2c365a;
+  --sm-color-text: #e9ecf5;
+  --sm-color-text-muted: #95a0c2;
+  --sm-color-primary: #5b8def;
+  --sm-color-primary-hover: #7aa5ff;
+  --sm-color-accent: #3dd685;
+  --sm-color-warn: #ffb74d;
+  --sm-color-danger: #f06464;
+
+  --sm-radius-sm: 6px;
+  --sm-radius-md: 10px;
+  --sm-radius-lg: 16px;
+
+  --sm-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --sm-shadow-md: 0 6px 18px rgba(0, 0, 0, 0.35);
+
+  --sm-space-1: 4px;
+  --sm-space-2: 8px;
+  --sm-space-3: 12px;
+  --sm-space-4: 16px;
+  --sm-space-5: 24px;
+  --sm-space-6: 32px;
+  --sm-space-7: 48px;
+
+  --sm-sidebar-width: 240px;
+  --sm-header-height: 60px;
+
+  --sm-font-base: 16px;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: var(--sm-color-bg);
+  color: var(--sm-color-text);
+  font-family: "Inter", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: var(--sm-font-base);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: var(--sm-color-primary);
+  text-decoration: none;
+}
+
+a:hover,
+a:focus-visible {
+  color: var(--sm-color-primary-hover);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid var(--sm-color-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.sm-skip-link {
+  position: absolute;
+  top: -100px;
+  left: var(--sm-space-3);
+  background: var(--sm-color-primary);
+  color: #fff;
+  padding: var(--sm-space-2) var(--sm-space-4);
+  border-radius: var(--sm-radius-sm);
+  z-index: 10000;
+  transition: top 120ms ease-in;
+}
+
+.sm-skip-link:focus {
+  top: var(--sm-space-3);
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --sm-font-base: 16.5px;
+  }
+}
