@@ -6,7 +6,7 @@
   "scripts": {
     "install:all": "npm --prefix legacy-shell install && npm --prefix mfe-stats install && npm --prefix mfe-notifications install && npm --prefix shell-modern install",
     "dev:phase1": "concurrently -n legacy,stats,notif -c blue,yellow,magenta \"npm --prefix legacy-shell run start\" \"npm --prefix mfe-stats run start\" \"npm --prefix mfe-notifications run start\"",
-    "dev:phase2": "concurrently -n shell,legacy,stats,notif -c cyan,blue,yellow,magenta \"npm --prefix shell-modern run start\" \"npm --prefix legacy-shell run start\" \"npm --prefix mfe-stats run start\" \"npm --prefix mfe-notifications run start\"",
+    "dev:phase2": "bash scripts/dev-phase2.sh",
     "dev:legacy": "npm --prefix legacy-shell run start",
     "dev:shell": "npm --prefix shell-modern run start",
     "dev:stats": "npm --prefix mfe-stats run start",
