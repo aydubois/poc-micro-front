@@ -18,9 +18,20 @@
 
     <div class="layout__spacer"></div>
 
-    <div class="layout__user">
-      <span class="layout__user-name">À connecter</span>
-    </div>
+    @if (currentUser(); as user) {
+      <div class="layout__user">
+        <span class="layout__user-avatar" aria-hidden="true">{{ userInitials() }}</span>
+        <span class="layout__user-name">{{ user.displayName }}</span>
+        <button
+          type="button"
+          class="layout__logout-btn"
+          aria-label="Se déconnecter"
+          (click)="onLogout()"
+        >
+          Déconnexion
+        </button>
+      </div>
+    }
   </header>
 
   <aside class="layout__sidebar" role="navigation" aria-label="Navigation principale">

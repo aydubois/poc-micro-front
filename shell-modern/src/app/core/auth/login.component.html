@@ -1,0 +1,46 @@
+<main class="login">
+  <section class="login__card" aria-labelledby="login-title">
+    <header class="login__brand">
+      <span class="login__brand-icon" aria-hidden="true">⚡</span>
+      <span class="login__brand-name">Shell Modern</span>
+    </header>
+
+    <h1 id="login-title" class="login__title">Connexion</h1>
+    <p class="login__hint">POC : utilisez <code>admin</code> / <code>admin</code></p>
+
+    <form class="login__form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+      <label class="login__field">
+        <span class="login__label">Identifiant</span>
+        <input
+          type="text"
+          formControlName="username"
+          autocomplete="username"
+          autofocus
+          [attr.aria-invalid]="form.controls.username.invalid && form.controls.username.touched"
+        />
+        @if (form.controls.username.hasError('required') && form.controls.username.touched) {
+          <span class="login__error" role="alert">Champ requis.</span>
+        }
+      </label>
+
+      <label class="login__field">
+        <span class="login__label">Mot de passe</span>
+        <input
+          type="password"
+          formControlName="password"
+          autocomplete="current-password"
+          [attr.aria-invalid]="form.controls.password.invalid && form.controls.password.touched"
+        />
+        @if (form.controls.password.hasError('required') && form.controls.password.touched) {
+          <span class="login__error" role="alert">Champ requis.</span>
+        }
+      </label>
+
+      @if (errorMessage()) {
+        <div class="login__global-error" role="alert">{{ errorMessage() }}</div>
+      }
+
+      <button type="submit" class="login__submit">Se connecter</button>
+    </form>
+  </section>
+</main>

@@ -1,5 +1,7 @@
-import { Component, signal } from '@angular/core'
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router'
+import { Component, computed, inject, signal } from '@angular/core'
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router'
+
+import { AuthService } from '../core/auth/auth.service'
 
 interface NavItem {
   label: string
@@ -10,9 +12,8 @@ interface NavItem {
 
 /**
  * Layout principal du shell moderne (post-authentification).
- * Header en haut + sidebar à gauche + outlet à droite.
- * Le menu est déclaré en dur ici pour le POC ; en prod il viendrait d'une
- * configuration ou des claims de l'utilisateur.
+ * Header en haut avec utilisateur courant + déconnexion, sidebar à gauche
+ * avec menu Legacy/MFE, outlet à droite.
  */
 @Component({
   selector: 'app-layout',
@@ -21,7 +22,21 @@ interface NavItem {
   styleUrl: './layout.component.scss'
 })
 export class LayoutComponent {
+  private readonly auth = inject(AuthService)
+  private readonly router = inject(Router)
+
   readonly isSidebarOpen = signal(true)
+  readonly currentUser = this.auth.currentUser
+  readonly userInitials = computed(() => {
+    const user = this.currentUser()
+    if (!user) return ''
+    return user.displayName
+      .split(' ')
+      .map(w => w.charAt(0))
+      .slice(0, 2)
+      .join('')
+      .toUpperCase()
+  })
 
   readonly navItems: ReadonlyArray<NavItem> = [
     { label: 'Tableau de bord', path: '/dashboard', icon: '📊', group: 'legacy' },
@@ -38,5 +53,13 @@ export class LayoutComponent {
    */
   toggleSidebar(): void {
     this.isSidebarOpen.update(open => !open)
+  }
+
+  /**
+   * Déconnecte l'utilisateur et redirige vers /login.
+   */
+  onLogout(): void {
+    this.auth.logout()
+    this.router.navigateByUrl('/login')
   }
 }
