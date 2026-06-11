@@ -1,0 +1,15 @@
+<div class="notifications-element-host">
+  <ng-container *ngIf="!isReady && !errorMessage">
+    <p class="notifications-element-host__status" role="status" aria-live="polite">
+      Chargement du widget Notifications…
+    </p>
+  </ng-container>
+
+  <ng-container *ngIf="errorMessage">
+    <p class="notifications-element-host__error" role="alert">
+      Notifications indisponible : {{ errorMessage }}
+    </p>
+  </ng-container>
+
+  <mfe-notifications *ngIf="isReady"></mfe-notifications>
+</div>

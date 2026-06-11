@@ -1,17 +1,12 @@
 <div class="poc-page users">
   <h1 class="poc-section-title">Utilisateurs</h1>
 
-  <!-- ** POC ** Emplacement micro-frontend Notifications retiré pour les
-       mêmes raisons que celui de Dashboard : le legacy A16 ne peut plus
-       initialiser proprement sa runtime Native Federation quand il
-       cohabite avec celle du shell A21 (conflit d'import map sur
-       @angular/common). La feature est désormais exposée par le shell
-       moderne sur la route /notifications. -->
-  <section class="users__mfe-disabled" aria-label="Notifications (déplacé vers le shell)">
-    <p class="users__mfe-disabled-text">
-      Les notifications utilisateurs sont désormais accessibles via la route
-      <strong>/notifications</strong> du shell moderne (widget mfe-notifications).
-    </p>
+  <!-- ** POC ** Notifications réintégrées via le custom element
+       <mfe-notifications> (mfe-notifications Angular 16 encapsulé). Même
+       stratégie que pour le Dashboard : platform A16 isolé, pas de
+       composant standalone instancié cross-version. -->
+  <section class="users__mfe" aria-label="Notifications">
+    <app-notifications-element-host></app-notifications-element-host>
   </section>
 
   <section aria-labelledby="recent-users-title" class="users__recent">

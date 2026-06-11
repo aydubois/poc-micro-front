@@ -1,0 +1,15 @@
+<div class="stats-element-host">
+  <ng-container *ngIf="!isReady && !errorMessage">
+    <p class="stats-element-host__status" role="status" aria-live="polite">
+      Chargement du widget Stats…
+    </p>
+  </ng-container>
+
+  <ng-container *ngIf="errorMessage">
+    <p class="stats-element-host__error" role="alert">
+      Stats indisponible : {{ errorMessage }}
+    </p>
+  </ng-container>
+
+  <mfe-stats *ngIf="isReady"></mfe-stats>
+</div>

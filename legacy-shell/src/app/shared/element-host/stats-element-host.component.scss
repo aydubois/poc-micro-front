@@ -1,0 +1,19 @@
+.stats-element-host {
+  display: block;
+  margin-top: 24px;
+}
+
+.stats-element-host__status {
+  font-style: italic;
+  color: rgba(0, 0, 0, 0.55);
+  margin: 12px 0;
+}
+
+.stats-element-host__error {
+  background: rgba(244, 67, 54, 0.1);
+  color: #b71c1c;
+  border-left: 3px solid #b71c1c;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin: 12px 0;
+}
