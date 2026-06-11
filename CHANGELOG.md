@@ -1,7 +1,5 @@
 # Changelog du POC micro-frontends
 
-Cet historique explique chaque étape du POC dans un langage accessible. L'idée : tu dois pouvoir suivre la construction même si tu ne connais ni Module Federation, ni Native Federation, ni les particularités cross-version d'Angular.
-
 **Trois mots-clés à connaître** :
 - **Shell** = l'application "coquille" qui encadre tout (menu, header, routing) et qui charge les autres morceaux.
 - **Micro-frontend** = un bout d'interface développé et déployé séparément, embarqué dans le shell à la demande.
