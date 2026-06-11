@@ -6,6 +6,8 @@ Tous les commits sont signés Conventional Commits, le code de POC est commenté
 
 ---
 
+![Schéma global de l'architecture](./schema_global.png)
+
 ## Vue d'ensemble
 
 | Projet | Version | Port | Rôle Native Federation |

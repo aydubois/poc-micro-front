@@ -1,5 +1,7 @@
 # Changelog du POC micro-frontends
 
+![Schéma global de l'architecture](./schema_global.png)
+
 **Trois mots-clés à connaître** :
 - **Shell** = l'application "coquille" qui encadre tout (menu, header, routing) et qui charge les autres morceaux.
 - **Micro-frontend** = un bout d'interface développé et déployé séparément, embarqué dans le shell à la demande.
@@ -83,7 +85,6 @@ On change de techno : **Native Federation**, plus récente, basée sur les stand
 
 ### `16b3b1c` · 2026-06-10 · Rédaction du `README` complet
 **Ce qui a été fait** : documentation de tout ce qui a été construit jusqu'ici.
-**Pourquoi** : sans doc, le POC n'est utilisable que par moi.
 
 ---
 
@@ -136,20 +137,3 @@ Maintenant que `<mfe-stats>` et `<mfe-notifications>` sont des balises HTML auto
 - Les pages Dashboard et Users du legacy retrouvent leurs widgets inline, sans la moindre erreur cross-version.
 
 **Pourquoi** : c'est le bénéfice de l'encapsulation en custom element. Une fois qu'une balise HTML existe globalement, **n'importe quel** code de **n'importe quelle** version d'Angular peut l'utiliser comme s'il s'agissait d'une balise standard. Le pattern est devenu portable.
-
----
-
-## En résumé pour un nouveau venu
-
-Le POC raconte une histoire :
-
-1. **On part d'une app Angular 16** qu'on suppose être un legacy à moderniser.
-2. **On la découpe en morceaux** (Module Federation, puis Native Federation).
-3. **On crée un shell moderne** en Angular 21 qui va devenir le point d'entrée principal.
-4. **On enchâsse le legacy dans le shell** via un Web Component, ce qui permet aux deux versions d'Angular de cohabiter.
-5. **On commence à migrer un morceau** vers Angular 18 pour montrer la trajectoire progressive.
-6. **On découvre les limites** : on ne peut pas mélanger deux versions d'Angular dans un même contexte d'exécution. Symptômes : `Rejected map override`, `NG0203`, `TypeError: fn is not a function`.
-7. **On adopte le pattern Web Component partout** : chaque micro-frontend a son propre platform Angular isolé, exposé via une balise `<mfe-xxx>`. Plus aucune négociation cross-version requise.
-8. **Le résultat final** : un shell Angular 21 qui charge un legacy Angular 16, des widgets Angular 16 et Angular 18, le tout sans la moindre erreur, et avec un état partagé via `shared-bus` + des événements via `CustomEvent`.
-
-La conclusion technique : **pour faire cohabiter plusieurs versions d'Angular, le seul mécanisme vraiment robuste est l'encapsulation en Web Component**. Les autres approches (factory.create, share scope Native Federation) sont fragiles dès qu'il y a un écart de version.
